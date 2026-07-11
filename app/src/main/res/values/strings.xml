@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Freelancer Tools</string>
+
+    <string name="shortcut_scan_qr_short">Scanner QR</string>
+    <string name="shortcut_scan_qr_long">Scanner un QR code</string>
+    <string name="shortcut_new_invoice_short">Nouvelle Facture</string>
+    <string name="shortcut_new_invoice_long">Créer une nouvelle facture</string>
+    <string name="shortcut_optimize_image_short">Optimiser Image</string>
+    <string name="shortcut_optimize_image_long">Optimiser une image</string>
+    <string name="shortcut_speed_test_short">Speed Test</string>
+    <string name="shortcut_speed_test_long">Lancer un test de vitesse</string>
+</resources>

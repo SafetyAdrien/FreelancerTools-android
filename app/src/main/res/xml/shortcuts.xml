@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <shortcut
+        android:shortcutId="scan_qr"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_qr"
+        android:shortcutShortLabel="@string/shortcut_scan_qr_short"
+        android:shortcutLongLabel="@string/shortcut_scan_qr_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.freelancertools.app"
+            android:targetClass="com.freelancertools.app.MainActivity">
+            <extra android:name="shortcut_route" android:value="tools/qr_codes" />
+        </intent>
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="new_invoice"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_invoice"
+        android:shortcutShortLabel="@string/shortcut_new_invoice_short"
+        android:shortcutLongLabel="@string/shortcut_new_invoice_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.freelancertools.app"
+            android:targetClass="com.freelancertools.app.MainActivity">
+            <extra android:name="shortcut_route" android:value="invoices/editor?invoiceId=" />
+        </intent>
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="optimize_image"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_image"
+        android:shortcutShortLabel="@string/shortcut_optimize_image_short"
+        android:shortcutLongLabel="@string/shortcut_optimize_image_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.freelancertools.app"
+            android:targetClass="com.freelancertools.app.MainActivity">
+            <extra android:name="shortcut_route" android:value="tools/image_optimizer" />
+        </intent>
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="speed_test"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_speed"
+        android:shortcutShortLabel="@string/shortcut_speed_test_short"
+        android:shortcutLongLabel="@string/shortcut_speed_test_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.freelancertools.app"
+            android:targetClass="com.freelancertools.app.MainActivity">
+            <extra android:name="shortcut_route" android:value="tools/speed_test" />
+        </intent>
+    </shortcut>
+
+</shortcuts>
