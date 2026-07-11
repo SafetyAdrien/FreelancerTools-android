@@ -46,6 +46,11 @@ fun DrawerContent(
 ) {
     var query by rememberSaveable { mutableStateOf("") }
     val collapsedSections by viewModel.collapsedSections.collectAsStateWithLifecycle()
+    val catalog by viewModel.catalog.collectAsStateWithLifecycle()
+    val visibleCategories = catalog.categories.map { category ->
+        category.copy(tools = category.tools.filter { it.id !in catalog.hiddenTools })
+    }.filter { it.tools.isNotEmpty() }
+    val visibleTools = visibleCategories.flatMap { it.tools }
 
     ModalDrawerSheet(modifier = modifier) {
         Column(Modifier.fillMaxWidth()) {
@@ -90,7 +95,7 @@ fun DrawerContent(
                     item { Spacer(Modifier.height(8.dp)) }
                     item { SectionLabel("Outils") }
 
-                    toolCategories.forEach { category ->
+                    visibleCategories.forEach { category ->
                         val collapsed = category.id in collapsedSections
                         item(key = "header_${category.id}") {
                             CategoryHeader(
@@ -106,7 +111,7 @@ fun DrawerContent(
                         }
                     }
                 } else {
-                    val matches = allTools.filter { it.title.contains(query, ignoreCase = true) } +
+                    val matches = visibleTools.filter { it.title.contains(query, ignoreCase = true) } +
                         generalItems.filter { it.title.contains(query, ignoreCase = true) }
                     if (matches.isEmpty()) {
                         item {

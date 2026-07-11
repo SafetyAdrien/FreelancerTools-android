@@ -10,6 +10,7 @@ object Routes {
     const val INVOICES = "invoices"
     const val INVOICE_EDITOR = "invoices/editor?invoiceId={invoiceId}"
     const val SETTINGS = "settings"
+    const val MANAGE_TOOLS = "settings/manage_tools"
 
     fun clientDetail(clientId: String) = "clients/$clientId"
     fun invoiceEditor(invoiceId: String? = null) = "invoices/editor?invoiceId=${invoiceId ?: ""}"

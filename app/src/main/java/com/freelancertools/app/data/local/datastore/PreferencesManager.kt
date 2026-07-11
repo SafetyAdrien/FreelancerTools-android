@@ -22,6 +22,8 @@ class PreferencesManager @Inject constructor(
         val COMPANY_NAME = stringPreferencesKey("company_name")
         val LAST_TOOL_ROUTE = stringPreferencesKey("last_tool_route")
         val COLLAPSED_SECTIONS = stringSetPreferencesKey("collapsed_sections")
+        val HIDDEN_TOOLS = stringSetPreferencesKey("hidden_tools")
+        val CATEGORY_ORDER = stringPreferencesKey("category_order")
         val ONBOARDED = booleanPreferencesKey("onboarded")
     }
 
@@ -58,5 +60,25 @@ class PreferencesManager @Inject constructor(
             if (collapsed) current.add(sectionId) else current.remove(sectionId)
             prefs[Keys.COLLAPSED_SECTIONS] = current
         }
+    }
+
+    /** IDs of tools hidden from the drawer via Paramètres > Gérer les outils. */
+    val hiddenTools: Flow<Set<String>> = dataStore.data.map { it[Keys.HIDDEN_TOOLS] ?: emptySet() }
+
+    suspend fun setToolHidden(toolId: String, hidden: Boolean) {
+        dataStore.edit { prefs ->
+            val current = prefs[Keys.HIDDEN_TOOLS]?.toMutableSet() ?: mutableSetOf()
+            if (hidden) current.add(toolId) else current.remove(toolId)
+            prefs[Keys.HIDDEN_TOOLS] = current
+        }
+    }
+
+    /** User-customized drawer category order (category ids, comma-joined). Empty = default order. */
+    val categoryOrder: Flow<List<String>> = dataStore.data.map { prefs ->
+        prefs[Keys.CATEGORY_ORDER]?.split(",")?.filter { it.isNotBlank() } ?: emptyList()
+    }
+
+    suspend fun setCategoryOrder(order: List<String>) {
+        dataStore.edit { it[Keys.CATEGORY_ORDER] = order.joinToString(",") }
     }
 }

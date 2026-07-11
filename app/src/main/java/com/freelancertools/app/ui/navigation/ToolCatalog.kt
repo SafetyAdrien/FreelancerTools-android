@@ -112,3 +112,16 @@ val toolCategories = listOf(
 )
 
 val allTools: List<ToolItem> = toolCategories.flatMap { it.tools }
+
+/**
+ * Applies a user-customized category order (a list of category ids) on top of [toolCategories].
+ * Unknown/missing ids from [order] fall back to the default declaration order, and any category
+ * id in [order] that no longer exists in the catalog is simply ignored.
+ */
+fun orderedCategories(order: List<String>): List<ToolCategory> {
+    if (order.isEmpty()) return toolCategories
+    val byId = toolCategories.associateBy { it.id }
+    val ordered = order.mapNotNull { byId[it] }
+    val remaining = toolCategories.filter { it.id !in order }
+    return ordered + remaining
+}

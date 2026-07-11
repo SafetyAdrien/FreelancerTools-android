@@ -22,6 +22,7 @@ import com.freelancertools.app.ui.dashboard.DashboardScreen
 import com.freelancertools.app.ui.finances.FinancesScreen
 import com.freelancertools.app.ui.invoices.InvoiceEditorScreen
 import com.freelancertools.app.ui.invoices.InvoicesScreen
+import com.freelancertools.app.ui.managetools.ManageToolsScreen
 import com.freelancertools.app.ui.settings.SettingsScreen
 import com.freelancertools.app.ui.tools.backgroundremoval.BackgroundRemovalScreen
 import com.freelancertools.app.ui.tools.blobmaker.BlobMakerScreen
@@ -94,7 +95,10 @@ fun FreelancerToolsApp(startRoute: String? = null) {
                 DashboardScreen(navigation = topLevel, onNavigate = ::navigateTopLevel)
             }
             composable(Routes.SETTINGS) {
-                SettingsScreen(navigation = topLevel)
+                SettingsScreen(navigation = topLevel, onManageTools = { push(Routes.MANAGE_TOOLS) })
+            }
+            composable(Routes.MANAGE_TOOLS) {
+                ManageToolsScreen(onBack = { navController.popBackStack() })
             }
 
             registerBusinessRoutes(navController, topLevel, ::push)

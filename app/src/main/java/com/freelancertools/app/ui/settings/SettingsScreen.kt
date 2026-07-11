@@ -44,6 +44,7 @@ import java.util.Locale
 @Composable
 fun SettingsScreen(
     navigation: ScaffoldNavigation,
+    onManageTools: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -132,6 +133,24 @@ fun SettingsScreen(
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
+            }
+        }
+
+        SectionTitle("Tiroir de navigation")
+        Card(
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            shape = MaterialTheme.shapes.large,
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Text(
+                    "Réordonnez les catégories et masquez les outils que vous n'utilisez pas.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                SecondaryActionButton(label = "Gérer les outils", onClick = onManageTools)
             }
         }
 
