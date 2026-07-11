@@ -79,6 +79,7 @@ dependencies {
     ksp(libs.room.compiler)
 
     implementation(libs.datastore.preferences)
+    implementation(libs.exifinterface)
 
     implementation(libs.coil.compose)
 

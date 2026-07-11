@@ -26,14 +26,20 @@ import com.freelancertools.app.ui.tools.blobmaker.BlobMakerScreen
 import com.freelancertools.app.ui.tools.converter.ConverterScreen
 import com.freelancertools.app.ui.tools.diffchecker.DiffCheckerScreen
 import com.freelancertools.app.ui.tools.embedvisualizer.EmbedVisualizerScreen
+import com.freelancertools.app.ui.tools.exifcleaner.ExifCleanerScreen
+import com.freelancertools.app.ui.tools.favicongenerator.FaviconGeneratorScreen
+import com.freelancertools.app.ui.tools.fontlibrary.FontLibraryScreen
 import com.freelancertools.app.ui.tools.fontpairer.FontPairerScreen
+import com.freelancertools.app.ui.tools.imageoptimizer.ImageOptimizerScreen
 import com.freelancertools.app.ui.tools.loremipsum.LoremIpsumScreen
 import com.freelancertools.app.ui.tools.markdownpreview.MarkdownPreviewScreen
 import com.freelancertools.app.ui.tools.metatags.MetaTagsScreen
 import com.freelancertools.app.ui.tools.palettes.PalettesScreen
 import com.freelancertools.app.ui.tools.promptmanager.PromptManagerScreen
+import com.freelancertools.app.ui.tools.qrcodes.QrCodesScreen
 import com.freelancertools.app.ui.tools.roicalculator.RoiCalculatorScreen
 import com.freelancertools.app.ui.tools.scalecalculator.ScaleCalculatorScreen
+import com.freelancertools.app.ui.tools.watermark.WatermarkScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -124,10 +130,19 @@ private fun NavGraphBuilder.registerToolRoutes(topLevel: ScaffoldNavigation) {
     composable(Routes.LOREM_IPSUM) { LoremIpsumScreen(topLevel) }
     composable(Routes.PROMPT_MANAGER) { PromptManagerScreen(topLevel) }
 
+    composable(Routes.QR_CODES) { QrCodesScreen(topLevel) }
+    composable(Routes.IMAGE_OPTIMIZER) { ImageOptimizerScreen(topLevel) }
+    composable(Routes.EXIF_CLEANER) { ExifCleanerScreen(topLevel) }
+    composable(Routes.FAVICON_GENERATOR) { FaviconGeneratorScreen(topLevel) }
+    composable(Routes.WATERMARK) { WatermarkScreen(topLevel) }
+    composable(Routes.FONT_LIBRARY) { FontLibraryScreen(topLevel) }
+
     val implementedRoutes = setOf(
         Routes.ROI_CALCULATOR, Routes.META_TAGS, Routes.MARKDOWN_PREVIEW, Routes.EMBED_VISUALIZER,
         Routes.DIFF_CHECKER, Routes.CONVERTER, Routes.PALETTES, Routes.FONT_PAIRER,
         Routes.SCALE_CALCULATOR, Routes.BLOB_MAKER, Routes.LOREM_IPSUM, Routes.PROMPT_MANAGER,
+        Routes.QR_CODES, Routes.IMAGE_OPTIMIZER, Routes.EXIF_CLEANER, Routes.FAVICON_GENERATOR,
+        Routes.WATERMARK, Routes.FONT_LIBRARY,
     )
     allTools.filter { it.route !in implementedRoutes }.forEach { tool ->
         composable(tool.route) {
