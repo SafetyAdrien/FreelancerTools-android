@@ -2,7 +2,9 @@ package com.freelancertools.app.data.local.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Entity(tableName = "invoices")
 data class Invoice(
     @PrimaryKey val id: String,

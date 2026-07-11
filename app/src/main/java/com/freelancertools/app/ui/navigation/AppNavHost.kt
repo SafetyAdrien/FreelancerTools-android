@@ -4,6 +4,7 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -48,7 +49,7 @@ import com.freelancertools.app.ui.tools.whois.WhoisScreen
 import kotlinx.coroutines.launch
 
 @Composable
-fun FreelancerToolsApp() {
+fun FreelancerToolsApp(startRoute: String? = null) {
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -69,6 +70,15 @@ fun FreelancerToolsApp() {
 
     fun push(route: String) {
         navController.navigate(route)
+    }
+
+    LaunchedEffect(startRoute) {
+        if (!startRoute.isNullOrBlank()) {
+            navController.navigate(startRoute) {
+                popUpTo(Routes.DASHBOARD) { saveState = true }
+                launchSingleTop = true
+            }
+        }
     }
 
     ModalNavigationDrawer(

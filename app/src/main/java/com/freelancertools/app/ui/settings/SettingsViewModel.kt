@@ -2,6 +2,7 @@ package com.freelancertools.app.ui.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.freelancertools.app.data.backup.BackupManager
 import com.freelancertools.app.data.local.datastore.PreferencesManager
 import com.freelancertools.app.ui.theme.AppThemeMode
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +22,7 @@ data class SettingsUiState(
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val preferencesManager: PreferencesManager,
+    private val backupManager: BackupManager,
 ) : ViewModel() {
 
     val themeMode: StateFlow<AppThemeMode> = preferencesManager.themeMode
@@ -44,5 +46,16 @@ class SettingsViewModel @Inject constructor(
 
     fun setCompanyName(name: String) {
         viewModelScope.launch { preferencesManager.setCompanyName(name) }
+    }
+
+    fun exportData(onResult: (String) -> Unit) {
+        viewModelScope.launch { onResult(backupManager.exportJson()) }
+    }
+
+    fun importData(content: String, onDone: (success: Boolean) -> Unit) {
+        viewModelScope.launch {
+            val success = runCatching { backupManager.importJson(content) }.isSuccess
+            onDone(success)
+        }
     }
 }

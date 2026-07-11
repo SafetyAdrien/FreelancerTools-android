@@ -2,7 +2,9 @@ package com.freelancertools.app.data.local.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Entity(tableName = "timer_sessions")
 data class TimerSession(
     @PrimaryKey val id: String,

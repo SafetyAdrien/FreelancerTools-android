@@ -25,9 +25,13 @@ class MainActivity : ComponentActivity() {
 
             FreelancerToolsTheme(themeMode = themeMode) {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    FreelancerToolsApp()
+                    FreelancerToolsApp(startRoute = intent.getStringExtra(EXTRA_SHORTCUT_ROUTE))
                 }
             }
         }
+    }
+
+    companion object {
+        const val EXTRA_SHORTCUT_ROUTE = "shortcut_route"
     }
 }

@@ -8,6 +8,7 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.freelancertools.app.FreelancerToolsApp
 import com.freelancertools.app.MainActivity
+import com.freelancertools.app.widget.SmartTimerWidget
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -53,10 +54,19 @@ class TimerForegroundService : Service() {
 
     private fun observeStateForNotification() {
         if (notificationJob?.isActive == true) return
+        var lastRunning: Boolean? = null
         notificationJob = scope.launch {
             TimerEngine.state.collectLatest { state ->
                 val manager = getSystemService(android.app.NotificationManager::class.java)
                 manager?.notify(NOTIFICATION_ID, buildNotification(state))
+
+                // Refresh the home screen widget on start/pause transitions and every 30s while running,
+                // rather than on every tick, to stay within AppWidgetManager's update-rate expectations.
+                if (lastRunning != state.isRunning || (state.isRunning && state.elapsedSeconds % 30 == 0)) {
+                    SmartTimerWidget().updateAll(this@TimerForegroundService)
+                }
+                lastRunning = state.isRunning
+
                 if (!state.isRunning && state.elapsedSeconds == 0) {
                     stopSelf()
                 }
