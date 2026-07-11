@@ -22,6 +22,18 @@ import com.freelancertools.app.ui.finances.FinancesScreen
 import com.freelancertools.app.ui.invoices.InvoiceEditorScreen
 import com.freelancertools.app.ui.invoices.InvoicesScreen
 import com.freelancertools.app.ui.settings.SettingsScreen
+import com.freelancertools.app.ui.tools.blobmaker.BlobMakerScreen
+import com.freelancertools.app.ui.tools.converter.ConverterScreen
+import com.freelancertools.app.ui.tools.diffchecker.DiffCheckerScreen
+import com.freelancertools.app.ui.tools.embedvisualizer.EmbedVisualizerScreen
+import com.freelancertools.app.ui.tools.fontpairer.FontPairerScreen
+import com.freelancertools.app.ui.tools.loremipsum.LoremIpsumScreen
+import com.freelancertools.app.ui.tools.markdownpreview.MarkdownPreviewScreen
+import com.freelancertools.app.ui.tools.metatags.MetaTagsScreen
+import com.freelancertools.app.ui.tools.palettes.PalettesScreen
+import com.freelancertools.app.ui.tools.promptmanager.PromptManagerScreen
+import com.freelancertools.app.ui.tools.roicalculator.RoiCalculatorScreen
+import com.freelancertools.app.ui.tools.scalecalculator.ScaleCalculatorScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -99,7 +111,25 @@ private fun NavGraphBuilder.registerBusinessRoutes(
 }
 
 private fun NavGraphBuilder.registerToolRoutes(topLevel: ScaffoldNavigation) {
-    allTools.forEach { tool ->
+    composable(Routes.ROI_CALCULATOR) { RoiCalculatorScreen(topLevel) }
+    composable(Routes.META_TAGS) { MetaTagsScreen(topLevel) }
+    composable(Routes.MARKDOWN_PREVIEW) { MarkdownPreviewScreen(topLevel) }
+    composable(Routes.EMBED_VISUALIZER) { EmbedVisualizerScreen(topLevel) }
+    composable(Routes.DIFF_CHECKER) { DiffCheckerScreen(topLevel) }
+    composable(Routes.CONVERTER) { ConverterScreen(topLevel) }
+    composable(Routes.PALETTES) { PalettesScreen(topLevel) }
+    composable(Routes.FONT_PAIRER) { FontPairerScreen(topLevel) }
+    composable(Routes.SCALE_CALCULATOR) { ScaleCalculatorScreen(topLevel) }
+    composable(Routes.BLOB_MAKER) { BlobMakerScreen(topLevel) }
+    composable(Routes.LOREM_IPSUM) { LoremIpsumScreen(topLevel) }
+    composable(Routes.PROMPT_MANAGER) { PromptManagerScreen(topLevel) }
+
+    val implementedRoutes = setOf(
+        Routes.ROI_CALCULATOR, Routes.META_TAGS, Routes.MARKDOWN_PREVIEW, Routes.EMBED_VISUALIZER,
+        Routes.DIFF_CHECKER, Routes.CONVERTER, Routes.PALETTES, Routes.FONT_PAIRER,
+        Routes.SCALE_CALCULATOR, Routes.BLOB_MAKER, Routes.LOREM_IPSUM, Routes.PROMPT_MANAGER,
+    )
+    allTools.filter { it.route !in implementedRoutes }.forEach { tool ->
         composable(tool.route) {
             PlaceholderScreen(title = tool.title, icon = tool.icon, navigation = topLevel)
         }
