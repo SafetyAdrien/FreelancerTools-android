@@ -6,6 +6,7 @@ import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.core.content.ContextCompat
+import androidx.glance.appwidget.updateAll
 import com.freelancertools.app.R
 import com.freelancertools.app.ui.tools.smarttimer.TimerEngine
 import com.freelancertools.app.ui.tools.smarttimer.TimerForegroundService
