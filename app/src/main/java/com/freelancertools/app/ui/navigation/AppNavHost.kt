@@ -41,8 +41,10 @@ import com.freelancertools.app.ui.tools.qrcodes.QrCodesScreen
 import com.freelancertools.app.ui.tools.roicalculator.RoiCalculatorScreen
 import com.freelancertools.app.ui.tools.scalecalculator.ScaleCalculatorScreen
 import com.freelancertools.app.ui.tools.smarttimer.SmartTimerScreen
+import com.freelancertools.app.ui.tools.speedtest.SpeedTestScreen
 import com.freelancertools.app.ui.tools.videocutter.VideoCutterScreen
 import com.freelancertools.app.ui.tools.watermark.WatermarkScreen
+import com.freelancertools.app.ui.tools.whois.WhoisScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -144,13 +146,16 @@ private fun NavGraphBuilder.registerToolRoutes(topLevel: ScaffoldNavigation) {
     composable(Routes.VIDEO_CUTTER) { VideoCutterScreen(topLevel) }
     composable(Routes.SMART_TIMER) { SmartTimerScreen(topLevel) }
 
+    composable(Routes.WHOIS_LOOKUP) { WhoisScreen(topLevel) }
+    composable(Routes.SPEED_TEST) { SpeedTestScreen(topLevel) }
+
     val implementedRoutes = setOf(
         Routes.ROI_CALCULATOR, Routes.META_TAGS, Routes.MARKDOWN_PREVIEW, Routes.EMBED_VISUALIZER,
         Routes.DIFF_CHECKER, Routes.CONVERTER, Routes.PALETTES, Routes.FONT_PAIRER,
         Routes.SCALE_CALCULATOR, Routes.BLOB_MAKER, Routes.LOREM_IPSUM, Routes.PROMPT_MANAGER,
         Routes.QR_CODES, Routes.IMAGE_OPTIMIZER, Routes.EXIF_CLEANER, Routes.FAVICON_GENERATOR,
         Routes.WATERMARK, Routes.FONT_LIBRARY, Routes.BACKGROUND_REMOVAL, Routes.VIDEO_CUTTER,
-        Routes.SMART_TIMER,
+        Routes.SMART_TIMER, Routes.WHOIS_LOOKUP, Routes.SPEED_TEST,
     )
     allTools.filter { it.route !in implementedRoutes }.forEach { tool ->
         composable(tool.route) {
