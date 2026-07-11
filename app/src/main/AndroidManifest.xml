@@ -37,7 +37,7 @@
         </activity>
 
         <service
-            android:name=".tools.smarttimer.TimerForegroundService"
+            android:name=".ui.tools.smarttimer.TimerForegroundService"
             android:exported="false"
             android:foregroundServiceType="specialUse">
             <property

@@ -22,6 +22,7 @@ import com.freelancertools.app.ui.finances.FinancesScreen
 import com.freelancertools.app.ui.invoices.InvoiceEditorScreen
 import com.freelancertools.app.ui.invoices.InvoicesScreen
 import com.freelancertools.app.ui.settings.SettingsScreen
+import com.freelancertools.app.ui.tools.backgroundremoval.BackgroundRemovalScreen
 import com.freelancertools.app.ui.tools.blobmaker.BlobMakerScreen
 import com.freelancertools.app.ui.tools.converter.ConverterScreen
 import com.freelancertools.app.ui.tools.diffchecker.DiffCheckerScreen
@@ -39,6 +40,8 @@ import com.freelancertools.app.ui.tools.promptmanager.PromptManagerScreen
 import com.freelancertools.app.ui.tools.qrcodes.QrCodesScreen
 import com.freelancertools.app.ui.tools.roicalculator.RoiCalculatorScreen
 import com.freelancertools.app.ui.tools.scalecalculator.ScaleCalculatorScreen
+import com.freelancertools.app.ui.tools.smarttimer.SmartTimerScreen
+import com.freelancertools.app.ui.tools.videocutter.VideoCutterScreen
 import com.freelancertools.app.ui.tools.watermark.WatermarkScreen
 import kotlinx.coroutines.launch
 
@@ -137,12 +140,17 @@ private fun NavGraphBuilder.registerToolRoutes(topLevel: ScaffoldNavigation) {
     composable(Routes.WATERMARK) { WatermarkScreen(topLevel) }
     composable(Routes.FONT_LIBRARY) { FontLibraryScreen(topLevel) }
 
+    composable(Routes.BACKGROUND_REMOVAL) { BackgroundRemovalScreen(topLevel) }
+    composable(Routes.VIDEO_CUTTER) { VideoCutterScreen(topLevel) }
+    composable(Routes.SMART_TIMER) { SmartTimerScreen(topLevel) }
+
     val implementedRoutes = setOf(
         Routes.ROI_CALCULATOR, Routes.META_TAGS, Routes.MARKDOWN_PREVIEW, Routes.EMBED_VISUALIZER,
         Routes.DIFF_CHECKER, Routes.CONVERTER, Routes.PALETTES, Routes.FONT_PAIRER,
         Routes.SCALE_CALCULATOR, Routes.BLOB_MAKER, Routes.LOREM_IPSUM, Routes.PROMPT_MANAGER,
         Routes.QR_CODES, Routes.IMAGE_OPTIMIZER, Routes.EXIF_CLEANER, Routes.FAVICON_GENERATOR,
-        Routes.WATERMARK, Routes.FONT_LIBRARY,
+        Routes.WATERMARK, Routes.FONT_LIBRARY, Routes.BACKGROUND_REMOVAL, Routes.VIDEO_CUTTER,
+        Routes.SMART_TIMER,
     )
     allTools.filter { it.route !in implementedRoutes }.forEach { tool ->
         composable(tool.route) {
