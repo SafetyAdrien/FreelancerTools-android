@@ -80,6 +80,7 @@ dependencies {
 
     implementation(libs.datastore.preferences)
     implementation(libs.exifinterface)
+    implementation(libs.material)
 
     implementation(libs.coil.compose)
 
