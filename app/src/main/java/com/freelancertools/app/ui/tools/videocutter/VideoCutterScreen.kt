@@ -74,6 +74,7 @@ fun VideoCutterScreen(navigation: ScaffoldNavigation) {
             fixedDuration = 15f
             minDuration = 8f
             maxDuration = 20f
+            isProcessing = false
             progressText = ""
             outputFiles.clear()
         },

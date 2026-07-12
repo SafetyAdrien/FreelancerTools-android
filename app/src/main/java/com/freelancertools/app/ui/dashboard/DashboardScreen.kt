@@ -49,7 +49,9 @@ fun DashboardScreen(
     viewModel: DashboardViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val displayName = state.accountUsername.trim().ifBlank { null }?.let { "@$it" } ?: "là"
+    val displayName = state.accountUsername.trim().ifBlank { null }?.let { "@$it" }
+        ?: state.billingName.trim().substringBefore(" ").ifBlank { null }
+        ?: "là"
     val currencyFormat = remember(Locale.FRANCE) {
         NumberFormat.getCurrencyInstance(Locale.FRANCE)
     }

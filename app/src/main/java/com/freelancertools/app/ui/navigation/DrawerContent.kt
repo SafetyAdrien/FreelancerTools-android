@@ -49,7 +49,7 @@ fun DrawerContent(
     val collapsedSections by viewModel.collapsedSections.collectAsStateWithLifecycle()
     val catalog by viewModel.catalog.collectAsStateWithLifecycle()
     val visibleCategories = catalog.categories.map { category ->
-        category.copy(tools = category.tools.filter { it.id !in catalog.hiddenTools })
+        category.copy(tools = category.tools.filter { it.id in alwaysVisibleToolIds || it.id !in catalog.hiddenTools })
     }.filter { it.tools.isNotEmpty() }
     val visibleTools = visibleCategories.flatMap { it.tools }
 
@@ -125,7 +125,7 @@ fun DrawerContent(
                         }
                     }
                 } else {
-                    val matches = visibleTools.filter { it.title.contains(query, ignoreCase = true) }
+                    val matches = (visibleTools + accountItem).filter { it.title.contains(query, ignoreCase = true) }
                     if (matches.isEmpty()) {
                         item {
                             Text(

@@ -3,6 +3,7 @@ package com.freelancertools.app.ui.common
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,6 +50,15 @@ fun SyncedOutlinedTextField(
             .drop(1)
             .debounce(debounceMillis)
             .collectLatest { onValueCommit(it) }
+    }
+
+    // The debounce above only fires after `debounceMillis` of inactivity — if the user navigates
+    // away sooner (e.g. presses back right after typing), that coroutine is cancelled before it
+    // ever commits. Flush the latest edit immediately so leaving the screen can't drop it.
+    DisposableEffect(Unit) {
+        onDispose {
+            if (isEditing) onValueCommit(fieldValue.text)
+        }
     }
 
     OutlinedTextField(

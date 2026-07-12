@@ -121,6 +121,13 @@ val toolCategories = listOf(
 val allTools: List<ToolItem> = toolCategories.flatMap { it.tools }
 
 /**
+ * Core business screens that must always stay reachable from the drawer — unlike other
+ * catalog tools, they can't be hidden via Paramètres > Gérer les outils, since there is no
+ * other navigation path back to them.
+ */
+val alwaysVisibleToolIds = setOf("finances", "clients", "invoices")
+
+/**
  * Applies a user-customized category order (a list of category ids) on top of [toolCategories].
  * Unknown/missing ids from [order] fall back to the default declaration order, and any category
  * id in [order] that no longer exists in the catalog is simply ignored.

@@ -44,7 +44,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -191,12 +193,14 @@ fun FinancesScreen(
         } else {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 state.filteredTransactions.forEach { row ->
-                    TransactionRowItem(
-                        row = row,
-                        currencyFormat = currencyFormat,
-                        dateFormat = dateFormat,
-                        onDeleteRequest = { pendingDelete = row.transaction },
-                    )
+                    key(row.transaction.id) {
+                        TransactionRowItem(
+                            row = row,
+                            currencyFormat = currencyFormat,
+                            dateFormat = dateFormat,
+                            onDeleteRequest = { pendingDelete = row.transaction },
+                        )
+                    }
                 }
             }
         }
@@ -374,9 +378,11 @@ private fun FilterSheet(
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                val zone = ZoneId.systemDefault()
-                customEnd = LocalDate.now(zone).atTime(23, 59, 59).atZone(zone).toInstant().toEpochMilli()
-                customStart = LocalDate.now(zone).minusDays(90).atStartOfDay(zone).toInstant().toEpochMilli()
+                LaunchedEffect(period) {
+                    val zone = ZoneId.systemDefault()
+                    customEnd = LocalDate.now(zone).atTime(23, 59, 59).atZone(zone).toInstant().toEpochMilli()
+                    customStart = LocalDate.now(zone).minusDays(90).atStartOfDay(zone).toInstant().toEpochMilli()
+                }
             }
 
             Text("Client", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)

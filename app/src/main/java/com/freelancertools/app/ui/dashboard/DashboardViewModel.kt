@@ -21,6 +21,7 @@ import javax.inject.Inject
 
 data class DashboardUiState(
     val accountUsername: String = "",
+    val billingName: String = "",
     val revenueThisMonth: Double = 0.0,
     val activeClientsCount: Int = 0,
     val activeProjectsCount: Int = 0,
@@ -36,15 +37,24 @@ class DashboardViewModel @Inject constructor(
     preferencesManager: PreferencesManager,
 ) : ViewModel() {
 
+    // Names are combined into one Pair flow first so the outer combine() stays within the
+    // 5-flow typed overload — the 6-flow vararg overload only supports a single common element
+    // type and would force unsafe casts back to Double/Int/String.
+    private val names = combine(
+        preferencesManager.accountUsername,
+        preferencesManager.userName,
+    ) { accountUsername, billingName -> accountUsername to billingName }
+
     val uiState: StateFlow<DashboardUiState> = combine(
         monthRevenueFlow(transactionRepository),
         clientRepository.observeActiveCount(),
         projectRepository.observeActiveCount(),
         paletteRepository.observeCount(),
-        preferencesManager.accountUsername,
-    ) { revenue, clients, projects, palettes, accountUsername ->
+        names,
+    ) { revenue, clients, projects, palettes, (accountUsername, billingName) ->
         DashboardUiState(
             accountUsername = accountUsername,
+            billingName = billingName,
             revenueThisMonth = revenue,
             activeClientsCount = clients,
             activeProjectsCount = projects,

@@ -28,6 +28,7 @@ import com.freelancertools.app.ui.common.ScaffoldNavigation
 import com.freelancertools.app.ui.common.ToolScaffold
 import com.freelancertools.app.ui.navigation.ToolCategory
 import com.freelancertools.app.ui.navigation.ToolItem
+import com.freelancertools.app.ui.navigation.alwaysVisibleToolIds
 
 @Composable
 fun ManageToolsScreen(onBack: () -> Unit, viewModel: ManageToolsViewModel = hiltViewModel()) {
@@ -100,6 +101,7 @@ private fun CategoryManagementCard(
 
 @Composable
 private fun ToolVisibilityRow(tool: ToolItem, hidden: Boolean, onToggle: (String, Boolean) -> Unit) {
+    val locked = tool.id in alwaysVisibleToolIds
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -111,15 +113,28 @@ private fun ToolVisibilityRow(tool: ToolItem, hidden: Boolean, onToggle: (String
             Icon(
                 tool.icon,
                 contentDescription = null,
-                tint = if (hidden) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.primary,
+                tint = if (hidden && !locked) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(end = 12.dp),
             )
-            Text(
-                tool.title,
-                style = MaterialTheme.typography.bodyLarge,
-                color = if (hidden) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
-            )
+            Column {
+                Text(
+                    tool.title,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = if (hidden && !locked) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
+                )
+                if (locked) {
+                    Text(
+                        "Toujours visible",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
         }
-        Switch(checked = !hidden, onCheckedChange = { visible -> onToggle(tool.id, !visible) })
+        Switch(
+            checked = locked || !hidden,
+            enabled = !locked,
+            onCheckedChange = { visible -> onToggle(tool.id, !visible) },
+        )
     }
 }
