@@ -13,6 +13,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.drop
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.drop
  * from the moment the user types; the source only seeds the field before that point, and writes
  * are debounced instead of firing (and racing back) on every keystroke.
  */
+@OptIn(FlowPreview::class)
 @Composable
 fun SyncedOutlinedTextField(
     sourceValue: String,
