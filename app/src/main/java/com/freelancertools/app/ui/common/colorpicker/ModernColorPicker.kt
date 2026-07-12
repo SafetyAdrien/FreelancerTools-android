@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -340,7 +341,7 @@ private fun HueSaturationValueSquare(
         val thumbY = with(density) { ((1f - v) * heightPx).toDp() } - thumbSize / 2
         Box(
             modifier = Modifier
-                .padding(start = thumbX, top = thumbY)
+                .offset(x = thumbX, y = thumbY)
                 .size(thumbSize)
                 .border(BorderStroke(3.dp, Color.White), CircleShape)
                 .border(BorderStroke(1.dp, Color.Black.copy(alpha = 0.3f)), CircleShape),
@@ -378,7 +379,7 @@ private fun HueSlider(hue: Float, onHueChange: (Float) -> Unit, modifier: Modifi
         val thumbX = with(density) { (hue / 360f * widthPx).toDp() } - 3.dp
         Box(
             modifier = Modifier
-                .padding(start = thumbX)
+                .offset(x = thumbX)
                 .width(6.dp)
                 .fillMaxHeight()
                 .background(Color.White, RoundedCornerShape(3.dp))
@@ -416,7 +417,7 @@ private fun AlphaSlider(baseColor: Color, alpha: Float, onAlphaChange: (Float) -
         val thumbX = with(density) { (alpha * widthPx).toDp() } - 3.dp
         Box(
             modifier = Modifier
-                .padding(start = thumbX)
+                .offset(x = thumbX)
                 .width(6.dp)
                 .fillMaxHeight()
                 .background(Color.White, RoundedCornerShape(3.dp))
@@ -474,7 +475,7 @@ private fun GrayscaleSlider(value: Float, onValueChange: (Float) -> Unit, modifi
         val thumbX = with(density) { (value * widthPx).toDp() } - 3.dp
         Box(
             modifier = Modifier
-                .padding(start = thumbX)
+                .offset(x = thumbX)
                 .width(6.dp)
                 .fillMaxHeight()
                 .background(Color.Gray, RoundedCornerShape(3.dp))
