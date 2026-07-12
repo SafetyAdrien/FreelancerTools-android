@@ -71,27 +71,35 @@ fun DiffCheckerScreen(navigation: ScaffoldNavigation) {
 
         diff?.let { lines ->
             SectionTitle("Résultat")
-            Card(
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                shape = MaterialTheme.shapes.large,
-            ) {
-                Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    lines.forEach { (typeOrdinal, text) ->
-                        val bg = when (typeOrdinal) {
-                            1 -> SuccessGreen.copy(alpha = 0.18f)
-                            2 -> MaterialTheme.colorScheme.error.copy(alpha = 0.18f)
-                            else -> androidx.compose.ui.graphics.Color.Transparent
+            if (before == after) {
+                Text(
+                    "Aucune différence.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            } else {
+                Card(
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    shape = MaterialTheme.shapes.large,
+                ) {
+                    Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        lines.forEach { (typeOrdinal, text) ->
+                            val bg = when (typeOrdinal) {
+                                1 -> SuccessGreen.copy(alpha = 0.18f)
+                                2 -> MaterialTheme.colorScheme.error.copy(alpha = 0.18f)
+                                else -> androidx.compose.ui.graphics.Color.Transparent
+                            }
+                            val prefix = when (typeOrdinal) { 1 -> "+ "; 2 -> "- "; else -> "  " }
+                            Text(
+                                text = prefix + text.ifBlank { " " },
+                                fontFamily = FontFamily.Monospace,
+                                style = MaterialTheme.typography.bodySmall,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(bg)
+                                    .padding(vertical = 2.dp, horizontal = 4.dp),
+                            )
                         }
-                        val prefix = when (typeOrdinal) { 1 -> "+ "; 2 -> "- "; else -> "  " }
-                        Text(
-                            text = prefix + text.ifBlank { " " },
-                            fontFamily = FontFamily.Monospace,
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(bg)
-                                .padding(vertical = 2.dp, horizontal = 4.dp),
-                        )
                     }
                 }
             }

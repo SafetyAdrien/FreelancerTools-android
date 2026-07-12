@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.graphics)
     implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.compose.ui.text.google.fonts)
     implementation(libs.compose.material3)
     implementation(libs.compose.material.icons.extended)
     debugImplementation(libs.compose.ui.tooling)
@@ -81,6 +82,7 @@ dependencies {
     implementation(libs.datastore.preferences)
     implementation(libs.exifinterface)
     implementation(libs.palette.ktx)
+    implementation(libs.play.services.basement)
     implementation(libs.material)
 
     implementation(libs.coil.compose)
