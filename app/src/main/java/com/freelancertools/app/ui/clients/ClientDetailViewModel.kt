@@ -9,6 +9,8 @@ import com.freelancertools.app.data.local.db.entity.ProjectStatus
 import com.freelancertools.app.data.repository.ClientRepository
 import com.freelancertools.app.data.repository.ProjectRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -42,6 +44,18 @@ class ClientDetailViewModel @Inject constructor(
             completedProjects = projects.filter { it.status == ProjectStatus.DONE },
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ClientDetailUiState())
+
+    private val _clientDeleted = MutableSharedFlow<Unit>()
+    val clientDeleted: SharedFlow<Unit> = _clientDeleted
+
+    fun deleteClient() {
+        val client = uiState.value.client ?: return
+        viewModelScope.launch {
+            projectRepository.deleteAllForClient(client.id)
+            clientRepository.delete(client)
+            _clientDeleted.emit(Unit)
+        }
+    }
 
     fun addProject(title: String, tag: String, price: Double, description: String?) {
         if (title.isBlank()) return

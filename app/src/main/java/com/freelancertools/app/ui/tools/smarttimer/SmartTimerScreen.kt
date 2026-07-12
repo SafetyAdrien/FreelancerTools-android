@@ -63,7 +63,12 @@ fun SmartTimerScreen(navigation: ScaffoldNavigation, viewModel: SmartTimerViewMo
 
     val notificationPermissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {}
 
-    ToolScaffold(title = "Smart Timer", icon = Icons.Rounded.Timer, navigation = navigation) {
+    ToolScaffold(
+        title = "Smart Timer",
+        icon = Icons.Rounded.Timer,
+        navigation = navigation,
+        onReset = { taskLabel = "Travail"; hourlyRate = "40"; modeExpanded = false; viewModel.reset() },
+    ) {
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), shape = MaterialTheme.shapes.large) {
             Row(Modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 ExposedDropdownMenuBox(expanded = modeExpanded, onExpandedChange = { modeExpanded = it }, modifier = Modifier.weight(1f)) {

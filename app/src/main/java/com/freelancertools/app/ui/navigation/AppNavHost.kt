@@ -26,7 +26,9 @@ import com.freelancertools.app.ui.managetools.ManageToolsScreen
 import com.freelancertools.app.ui.settings.SettingsScreen
 import com.freelancertools.app.ui.tools.backgroundremoval.BackgroundRemovalScreen
 import com.freelancertools.app.ui.tools.blobmaker.BlobMakerScreen
+import com.freelancertools.app.ui.tools.colorpickers.ColorPickersScreen
 import com.freelancertools.app.ui.tools.converter.ConverterScreen
+import com.freelancertools.app.ui.tools.designsystem.DesignSystemScreen
 import com.freelancertools.app.ui.tools.diffchecker.DiffCheckerScreen
 import com.freelancertools.app.ui.tools.embedvisualizer.EmbedVisualizerScreen
 import com.freelancertools.app.ui.tools.exifcleaner.ExifCleanerScreen
@@ -148,6 +150,8 @@ private fun NavGraphBuilder.registerToolRoutes(topLevel: ScaffoldNavigation) {
     composable(Routes.BLOB_MAKER) { BlobMakerScreen(topLevel) }
     composable(Routes.LOREM_IPSUM) { LoremIpsumScreen(topLevel) }
     composable(Routes.PROMPT_MANAGER) { PromptManagerScreen(topLevel) }
+    composable(Routes.COLOR_PICKERS) { ColorPickersScreen(topLevel) }
+    composable(Routes.DESIGN_SYSTEM) { DesignSystemScreen(topLevel) }
 
     composable(Routes.QR_CODES) { QrCodesScreen(topLevel) }
     composable(Routes.IMAGE_OPTIMIZER) { ImageOptimizerScreen(topLevel) }
@@ -167,6 +171,7 @@ private fun NavGraphBuilder.registerToolRoutes(topLevel: ScaffoldNavigation) {
         Routes.ROI_CALCULATOR, Routes.META_TAGS, Routes.MARKDOWN_PREVIEW, Routes.EMBED_VISUALIZER,
         Routes.DIFF_CHECKER, Routes.CONVERTER, Routes.PALETTES, Routes.FONT_PAIRER,
         Routes.SCALE_CALCULATOR, Routes.BLOB_MAKER, Routes.LOREM_IPSUM, Routes.PROMPT_MANAGER,
+        Routes.COLOR_PICKERS, Routes.DESIGN_SYSTEM,
         Routes.QR_CODES, Routes.IMAGE_OPTIMIZER, Routes.EXIF_CLEANER, Routes.FAVICON_GENERATOR,
         Routes.WATERMARK, Routes.FONT_LIBRARY, Routes.BACKGROUND_REMOVAL, Routes.VIDEO_CUTTER,
         Routes.SMART_TIMER, Routes.WHOIS_LOOKUP, Routes.SPEED_TEST,

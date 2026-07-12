@@ -44,6 +44,7 @@ fun WhoisScreen(navigation: ScaffoldNavigation) {
         title = "Whois Lookup",
         icon = Icons.Rounded.Public,
         navigation = navigation,
+        onReset = { domain = ""; result = ""; isLoading = false },
         bottomBar = {
             PrimaryActionButton(
                 label = "Rechercher",
@@ -53,7 +54,7 @@ fun WhoisScreen(navigation: ScaffoldNavigation) {
                     result = ""
                     scope.launch {
                         result = runCatching { WhoisClient.lookup(domain) }
-                            .getOrElse { "Erreur lors de la requête : ${it.message}" }
+                            .getOrElse { describeError(it) }
                         isLoading = false
                     }
                 },
@@ -91,4 +92,9 @@ fun WhoisScreen(navigation: ScaffoldNavigation) {
             )
         }
     }
+}
+
+private fun describeError(t: Throwable): String = when (t) {
+    is WhoisClient.WhoisException -> t.message ?: "Erreur réseau, réessayez."
+    else -> "Erreur réseau, réessayez."
 }

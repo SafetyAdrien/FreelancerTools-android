@@ -67,6 +67,16 @@ fun VideoCutterScreen(navigation: ScaffoldNavigation) {
         title = "Découpeur Vidéo",
         icon = Icons.Rounded.ContentCut,
         navigation = navigation,
+        onReset = {
+            videoUri = null
+            presetName = "Clips"
+            mode = CutMode.FIXED
+            fixedDuration = 15f
+            minDuration = 8f
+            maxDuration = 20f
+            progressText = ""
+            outputFiles.clear()
+        },
         bottomBar = {
             PrimaryActionButton(
                 label = if (isProcessing) "Découpage en cours..." else "Découper",

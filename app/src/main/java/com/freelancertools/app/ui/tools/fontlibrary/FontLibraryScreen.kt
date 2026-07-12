@@ -46,7 +46,12 @@ fun FontLibraryScreen(navigation: ScaffoldNavigation) {
     var textSize by remember { mutableFloatStateOf(28f) }
     var filter by rememberSaveable { mutableStateOf(FontKind.ALL) }
 
-    ToolScaffold(title = "Bibliothèque de Polices", icon = Icons.Rounded.TextFields, navigation = navigation) {
+    ToolScaffold(
+        title = "Bibliothèque de Polices",
+        icon = Icons.Rounded.TextFields,
+        navigation = navigation,
+        onReset = { previewText = "Le studio créatif"; textSize = 28f; filter = FontKind.ALL },
+    ) {
         OutlinedTextField(
             value = previewText,
             onValueChange = { previewText = it },

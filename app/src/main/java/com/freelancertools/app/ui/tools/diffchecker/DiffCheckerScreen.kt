@@ -44,6 +44,7 @@ fun DiffCheckerScreen(navigation: ScaffoldNavigation) {
         title = "Diff Checker",
         icon = Icons.Rounded.CompareArrows,
         navigation = navigation,
+        onReset = { before = ""; after = ""; diff = null },
         bottomBar = {
             PrimaryActionButton(
                 label = "Comparer",

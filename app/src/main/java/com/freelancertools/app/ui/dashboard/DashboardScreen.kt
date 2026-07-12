@@ -49,7 +49,7 @@ fun DashboardScreen(
     viewModel: DashboardViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val firstName = state.userName.trim().substringBefore(" ").ifBlank { "là" }
+    val displayName = state.accountUsername.trim().ifBlank { null }?.let { "@$it" } ?: "là"
     val currencyFormat = remember(Locale.FRANCE) {
         NumberFormat.getCurrencyInstance(Locale.FRANCE)
     }
@@ -66,7 +66,7 @@ fun DashboardScreen(
         ) {
             Column(Modifier.weight(1f)) {
                 Text(
-                    text = "Bonjour, $firstName 👋",
+                    text = "Bonjour, $displayName 👋",
                     style = MaterialTheme.typography.headlineMedium,
                 )
                 Text(

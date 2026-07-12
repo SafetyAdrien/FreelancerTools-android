@@ -58,6 +58,7 @@ fun FaviconGeneratorScreen(navigation: ScaffoldNavigation) {
         title = "Favicon Generator",
         icon = Icons.Rounded.ViewSidebar,
         navigation = navigation,
+        onReset = { sourceUri = null; sourceBitmap = null },
         bottomBar = {
             PrimaryActionButton(
                 label = "Générer et exporter (.zip)",

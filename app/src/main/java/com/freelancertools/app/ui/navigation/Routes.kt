@@ -40,10 +40,12 @@ object Routes {
     const val FONT_PAIRER = "tools/font_pairer"
     const val SCALE_CALCULATOR = "tools/scale_calculator"
     const val BLOB_MAKER = "tools/blob_maker"
+    const val LOREM_IPSUM = "tools/lorem_ipsum"
+    const val COLOR_PICKERS = "tools/color_pickers"
+    const val DESIGN_SYSTEM = "tools/design_system"
 
     // Utilities
     const val QR_CODES = "tools/qr_codes"
-    const val LOREM_IPSUM = "tools/lorem_ipsum"
     const val SMART_TIMER = "tools/smart_timer"
     const val VIDEO_CUTTER = "tools/video_cutter"
     const val PROMPT_MANAGER = "tools/prompt_manager"

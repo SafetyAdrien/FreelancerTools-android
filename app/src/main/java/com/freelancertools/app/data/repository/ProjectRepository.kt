@@ -15,4 +15,5 @@ class ProjectRepository @Inject constructor(
     fun observeActiveCount(): Flow<Int> = projectDao.observeActiveCount()
     suspend fun save(project: Project) = projectDao.upsert(project)
     suspend fun delete(project: Project) = projectDao.delete(project)
+    suspend fun deleteAllForClient(clientId: String) = projectDao.deleteAllForClient(clientId)
 }

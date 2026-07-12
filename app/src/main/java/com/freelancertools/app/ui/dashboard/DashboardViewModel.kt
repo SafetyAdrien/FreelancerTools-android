@@ -20,7 +20,7 @@ import java.time.ZoneId
 import javax.inject.Inject
 
 data class DashboardUiState(
-    val userName: String = "",
+    val accountUsername: String = "",
     val revenueThisMonth: Double = 0.0,
     val activeClientsCount: Int = 0,
     val activeProjectsCount: Int = 0,
@@ -41,10 +41,10 @@ class DashboardViewModel @Inject constructor(
         clientRepository.observeActiveCount(),
         projectRepository.observeActiveCount(),
         paletteRepository.observeCount(),
-        preferencesManager.userName,
-    ) { revenue, clients, projects, palettes, userName ->
+        preferencesManager.accountUsername,
+    ) { revenue, clients, projects, palettes, accountUsername ->
         DashboardUiState(
-            userName = userName,
+            accountUsername = accountUsername,
             revenueThisMonth = revenue,
             activeClientsCount = clients,
             activeProjectsCount = projects,

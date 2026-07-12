@@ -75,6 +75,13 @@ fun WatermarkScreen(navigation: ScaffoldNavigation) {
         title = "Filigrane",
         icon = Icons.Rounded.Brush,
         navigation = navigation,
+        onReset = {
+            sourceBitmap = null
+            text = "© Mon Studio"
+            position = WatermarkPosition.BOTTOM_RIGHT
+            opacity = 70f
+            textSize = 36f
+        },
         bottomBar = {
             PrimaryActionButton(
                 label = "Exporter",

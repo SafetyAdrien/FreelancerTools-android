@@ -58,7 +58,12 @@ fun ScaleCalculatorScreen(navigation: ScaffoldNavigation) {
     val base = baseSize.toDoubleOrNull() ?: 16.0
     val ratio = RATIOS[ratioIndex]
 
-    ToolScaffold(title = "Scale Calculator", icon = Icons.Rounded.FormatSize, navigation = navigation) {
+    ToolScaffold(
+        title = "Scale Calculator",
+        icon = Icons.Rounded.FormatSize,
+        navigation = navigation,
+        onReset = { baseSize = "16"; ratioIndex = 3; expanded = false },
+    ) {
         Card(
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
             shape = MaterialTheme.shapes.large,

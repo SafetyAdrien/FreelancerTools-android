@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!--
+      WHOIS (Whois Lookup tool) is a legacy plaintext-only protocol (RFC 3912, TCP port 43) with
+      no TLS variant. Since targetSdk 28+, Android blocks cleartext traffic by default for every
+      networking API (not just HTTP), which breaks the raw Socket connection outright — this is
+      the most likely cause of the tool crashing on every lookup. All other network calls in the
+      app (Speed Test, image sharing, etc.) use HTTPS and are unaffected by this setting either
+      way.
+    -->
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

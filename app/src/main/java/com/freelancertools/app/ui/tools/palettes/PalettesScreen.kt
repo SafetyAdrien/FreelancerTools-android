@@ -29,7 +29,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -44,32 +43,31 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.freelancertools.app.ui.common.PrimaryActionButton
 import com.freelancertools.app.ui.common.ScaffoldNavigation
 import com.freelancertools.app.ui.common.ToolScaffold
+import com.freelancertools.app.ui.common.colorpicker.ModernColorPickerDialog
 
-private val PRESET_COLORS = listOf(
-    0xFFFF3B5C, 0xFF3B82F6, 0xFF2ECC71, 0xFFF39C12, 0xFF9B59B6,
-    0xFFE74C3C, 0xFF1ABC9C, 0xFFF1C40F, 0xFF34495E, 0xFF00BCD4,
-).map { Color(it) }
+private val DEFAULT_HEX = listOf("#FF3B5C", "#3B82F6", "#2ECC71")
+private val SLOT_LABELS = listOf("Primaire", "Secondaire", "Accent")
 
 @Composable
 fun PalettesScreen(navigation: ScaffoldNavigation, viewModel: PalettesViewModel = hiltViewModel()) {
     var name by rememberSaveable { mutableStateOf("Nouvelle Palette") }
-    var primaryIndex by rememberSaveable { mutableIntStateOf(0) }
-    var secondaryIndex by rememberSaveable { mutableIntStateOf(1) }
-    var accentIndex by rememberSaveable { mutableIntStateOf(2) }
+    var slotHex by rememberSaveable { mutableStateOf(DEFAULT_HEX) }
+    var editingSlot by rememberSaveable { mutableStateOf(-1) }
     val saved by viewModel.savedPalettes.collectAsStateWithLifecycle()
     val clipboard = LocalContext.current.getSystemService(ClipboardManager::class.java)
 
-    val colors = listOf(PRESET_COLORS[primaryIndex], PRESET_COLORS[secondaryIndex], PRESET_COLORS[accentIndex])
+    val colors = slotHex.map { parseHexOrGray(it) }
 
     ToolScaffold(
         title = "Palettes",
         icon = Icons.Rounded.Palette,
         navigation = navigation,
+        onReset = { name = "Nouvelle Palette"; slotHex = DEFAULT_HEX; editingSlot = -1 },
         bottomBar = {
             PrimaryActionButton(
                 label = "Enregistrer",
                 icon = Icons.Rounded.Save,
-                onClick = { viewModel.savePalette(name, colors.map { it.toHex() }) },
+                onClick = { viewModel.savePalette(name, slotHex) },
             )
         },
     ) {
@@ -83,9 +81,9 @@ fun PalettesScreen(navigation: ScaffoldNavigation, viewModel: PalettesViewModel 
 
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), shape = MaterialTheme.shapes.large) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                ColorSlotRow("Primaire", colors[0]) { primaryIndex = (primaryIndex + 1) % PRESET_COLORS.size }
-                ColorSlotRow("Secondaire", colors[1]) { secondaryIndex = (secondaryIndex + 1) % PRESET_COLORS.size }
-                ColorSlotRow("Accent", colors[2]) { accentIndex = (accentIndex + 1) % PRESET_COLORS.size }
+                SLOT_LABELS.forEachIndexed { index, label ->
+                    ColorSlotRow(label, colors[index]) { editingSlot = index }
+                }
             }
         }
 
@@ -145,6 +143,17 @@ fun PalettesScreen(navigation: ScaffoldNavigation, viewModel: PalettesViewModel 
                 }
             }
         }
+    }
+
+    if (editingSlot >= 0) {
+        val slot = editingSlot
+        ModernColorPickerDialog(
+            initialColor = colors[slot],
+            onDismiss = { editingSlot = -1 },
+            onColorConfirmed = { picked ->
+                slotHex = slotHex.toMutableList().also { it[slot] = picked.toHex() }
+            },
+        )
     }
 }
 

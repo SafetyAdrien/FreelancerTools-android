@@ -15,6 +15,7 @@ import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -54,11 +55,21 @@ fun DrawerContent(
 
     ModalDrawerSheet(modifier = modifier) {
         Column(Modifier.fillMaxWidth()) {
-            Text(
-                text = "Freelancer Tools",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(20.dp, 20.dp, 20.dp, 12.dp),
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp, 20.dp, 12.dp, 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "Freelancer Tools",
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.weight(1f),
+                )
+                IconButton(onClick = { onNavigate(settingsItem.route) }) {
+                    Icon(Icons.Rounded.Settings, contentDescription = "Paramètres")
+                }
+            }
 
             OutlinedTextField(
                 value = query,
@@ -82,18 +93,21 @@ fun DrawerContent(
 
             Spacer(Modifier.height(8.dp))
 
+            if (query.isBlank()) {
+                DrawerRow(homeItem, currentRoute == homeItem.route, onNavigate)
+                HorizontalDivider(
+                    color = MaterialTheme.colorScheme.outline,
+                    modifier = Modifier.padding(vertical = 12.dp),
+                )
+            }
+
             LazyColumn(
                 modifier = Modifier.weight(1f, fill = false),
                 contentPadding = PaddingValues(bottom = 8.dp),
             ) {
                 if (query.isBlank()) {
-                    item { SectionLabel("Général") }
-                    items(generalItems, key = { it.id }) { item ->
-                        DrawerRow(item, currentRoute == item.route, onNavigate)
-                    }
-
+                    item { DrawerRow(accountItem, currentRoute == accountItem.route, onNavigate) }
                     item { Spacer(Modifier.height(8.dp)) }
-                    item { SectionLabel("Outils") }
 
                     visibleCategories.forEach { category ->
                         val collapsed = category.id in collapsedSections
@@ -111,8 +125,7 @@ fun DrawerContent(
                         }
                     }
                 } else {
-                    val matches = visibleTools.filter { it.title.contains(query, ignoreCase = true) } +
-                        generalItems.filter { it.title.contains(query, ignoreCase = true) }
+                    val matches = visibleTools.filter { it.title.contains(query, ignoreCase = true) }
                     if (matches.isEmpty()) {
                         item {
                             Text(
@@ -129,22 +142,8 @@ fun DrawerContent(
                     }
                 }
             }
-
-            HorizontalDivider(color = MaterialTheme.colorScheme.outline)
-            DrawerRow(settingsItem, currentRoute == settingsItem.route, onNavigate)
-            Spacer(Modifier.height(8.dp))
         }
     }
-}
-
-@Composable
-private fun SectionLabel(text: String) {
-    Text(
-        text = text.uppercase(),
-        style = MaterialTheme.typography.labelSmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier = Modifier.padding(start = 20.dp, top = 8.dp, bottom = 4.dp),
-    )
 }
 
 @Composable

@@ -36,7 +36,12 @@ private const val SAMPLE = "# Titre\n\nUn paragraphe avec du **gras** et de l'*i
 fun MarkdownPreviewScreen(navigation: ScaffoldNavigation) {
     var markdown by rememberSaveable { mutableStateOf(SAMPLE) }
 
-    ToolScaffold(title = "Markdown Preview", icon = Icons.Rounded.Description, navigation = navigation) {
+    ToolScaffold(
+        title = "Markdown Preview",
+        icon = Icons.Rounded.Description,
+        navigation = navigation,
+        onReset = { markdown = SAMPLE },
+    ) {
         SectionTitle("Éditeur")
         OutlinedTextField(
             value = markdown,

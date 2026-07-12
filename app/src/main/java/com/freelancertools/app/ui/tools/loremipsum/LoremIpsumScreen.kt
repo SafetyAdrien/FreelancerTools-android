@@ -66,6 +66,7 @@ fun LoremIpsumScreen(navigation: ScaffoldNavigation) {
         title = "Lorem Ipsum",
         icon = Icons.Rounded.Notes,
         navigation = navigation,
+        onReset = { type = LoremType.PARAGRAPHS; quantity = 3f; startWithLorem = true; result = "" },
         bottomBar = {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 PrimaryActionButton(

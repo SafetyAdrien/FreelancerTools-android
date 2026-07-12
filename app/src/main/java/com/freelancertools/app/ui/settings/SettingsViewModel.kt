@@ -17,6 +17,7 @@ data class SettingsUiState(
     val themeMode: AppThemeMode = AppThemeMode.DARK,
     val userName: String = "",
     val companyName: String = "",
+    val accountUsername: String = "",
 )
 
 @HiltViewModel
@@ -32,8 +33,9 @@ class SettingsViewModel @Inject constructor(
         preferencesManager.themeMode,
         preferencesManager.userName,
         preferencesManager.companyName,
-    ) { theme, userName, companyName ->
-        SettingsUiState(theme, userName, companyName)
+        preferencesManager.accountUsername,
+    ) { theme, userName, companyName, accountUsername ->
+        SettingsUiState(theme, userName, companyName, accountUsername)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), SettingsUiState())
 
     fun setThemeMode(mode: AppThemeMode) {
@@ -46,6 +48,10 @@ class SettingsViewModel @Inject constructor(
 
     fun setCompanyName(name: String) {
         viewModelScope.launch { preferencesManager.setCompanyName(name) }
+    }
+
+    fun setAccountUsername(name: String) {
+        viewModelScope.launch { preferencesManager.setAccountUsername(name) }
     }
 
     fun exportData(onResult: (String) -> Unit) {

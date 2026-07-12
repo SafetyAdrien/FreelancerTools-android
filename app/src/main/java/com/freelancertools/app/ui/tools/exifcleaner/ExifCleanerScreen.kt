@@ -59,6 +59,7 @@ fun ExifCleanerScreen(navigation: ScaffoldNavigation) {
         title = "Nettoyeur EXIF",
         icon = Icons.Rounded.FilterVintage,
         navigation = navigation,
+        onReset = { selectedUris = emptyList(); results.clear() },
         bottomBar = {
             PrimaryActionButton(
                 label = "Nettoyer (${selectedUris.size})",

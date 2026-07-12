@@ -2,20 +2,31 @@ package com.freelancertools.app.ui.tools.whois
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.io.BufferedReader
+import java.io.IOException
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
+import java.net.InetSocketAddress
 import java.net.Socket
 import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 /**
  * Queries the WHOIS protocol (RFC 3912, TCP port 43) directly — no third-party HTTP API or key
  * needed, and the raw text response matches the tool's "brut" output requirement exactly.
+ *
+ * WHOIS has no TLS variant, so cleartext socket traffic must be explicitly allowed via
+ * res/xml/network_security_config.xml — without it, Android blocks the raw Socket connection
+ * outright on API 28+ (targetSdk 28+ defaults to cleartextTrafficPermitted=false for every
+ * networking API, not just HTTP libraries), which is the most likely cause of an instant crash
+ * on every lookup rather than just "some" domains.
  */
 object WhoisClient {
 
     private const val PORT = 43
-    private const val TIMEOUT_MS = 8000
+    private const val TIMEOUT_MS = 10_000
+    private const val MAX_RESPONSE_CHARS = 20_000
+
+    class WhoisException(message: String, cause: Throwable? = null) : Exception(message, cause)
 
     // Fallback map for common TLDs in case the IANA referral step fails.
     private val KNOWN_SERVERS = mapOf(
@@ -31,13 +42,21 @@ object WhoisClient {
 
     suspend fun lookup(domain: String): String = withContext(Dispatchers.IO) {
         val clean = domain.trim().lowercase().removePrefix("http://").removePrefix("https://").substringBefore("/")
+        if (clean.isBlank() || !clean.contains(".")) {
+            throw WhoisException("Domaine invalide.")
+        }
         val tld = clean.substringAfterLast(".", "")
 
         val server = runCatching { findAuthoritativeServer(clean) }.getOrNull()
             ?: KNOWN_SERVERS[tld]
             ?: "whois.iana.org"
 
-        query(server, clean)
+        val raw = query(server, clean)
+        if (raw.length > MAX_RESPONSE_CHARS) {
+            raw.take(MAX_RESPONSE_CHARS) + "\n\n… Résultat tronqué (réponse trop longue)."
+        } else {
+            raw
+        }
     }
 
     private fun findAuthoritativeServer(domain: String): String? {
@@ -47,17 +66,35 @@ object WhoisClient {
     }
 
     private fun query(server: String, domain: String): String {
-        return try {
+        try {
             Socket().use { socket ->
-                socket.connect(java.net.InetSocketAddress(server, PORT), TIMEOUT_MS)
+                socket.connect(InetSocketAddress(server, PORT), TIMEOUT_MS)
                 socket.soTimeout = TIMEOUT_MS
-                val writer = OutputStreamWriter(socket.getOutputStream())
-                writer.write("$domain\r\n")
-                writer.flush()
-                BufferedReader(InputStreamReader(socket.getInputStream())).readText()
+                OutputStreamWriter(socket.getOutputStream()).apply {
+                    write("$domain\r\n")
+                    flush()
+                }
+                return readBounded(socket, MAX_RESPONSE_CHARS)
             }
+        } catch (e: UnknownHostException) {
+            throw WhoisException("Serveur WHOIS introuvable ($server).", e)
         } catch (e: SocketTimeoutException) {
-            "Le serveur WHOIS ($server) n'a pas répondu à temps."
+            throw WhoisException("Le serveur WHOIS ($server) n'a pas répondu à temps.", e)
+        } catch (e: IOException) {
+            throw WhoisException("Erreur réseau lors de la connexion à $server.", e)
         }
+    }
+
+    /** Reads at most [maxChars] characters so a chatty/misbehaving server can't exhaust memory. */
+    private fun readBounded(socket: Socket, maxChars: Int): String {
+        val reader = InputStreamReader(socket.getInputStream())
+        val buffer = CharArray(4096)
+        val builder = StringBuilder()
+        while (builder.length < maxChars) {
+            val read = reader.read(buffer)
+            if (read == -1) break
+            builder.append(buffer, 0, read)
+        }
+        return builder.toString()
     }
 }

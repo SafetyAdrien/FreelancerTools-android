@@ -9,14 +9,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AlternateEmail
 import androidx.compose.material.icons.rounded.Business
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
@@ -35,6 +36,7 @@ import com.freelancertools.app.ui.common.PrimaryActionButton
 import com.freelancertools.app.ui.common.ScaffoldNavigation
 import com.freelancertools.app.ui.common.SecondaryActionButton
 import com.freelancertools.app.ui.common.SectionTitle
+import com.freelancertools.app.ui.common.SyncedOutlinedTextField
 import com.freelancertools.app.ui.common.ToolScaffold
 import com.freelancertools.app.ui.theme.AppThemeMode
 import java.text.SimpleDateFormat
@@ -103,6 +105,31 @@ fun SettingsScreen(
             }
         }
 
+        SectionTitle("Compte")
+        Card(
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            shape = MaterialTheme.shapes.large,
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Text(
+                    "Affiché partout dans l'app (accueil, en-têtes) — jamais sur vos factures exportées.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                SyncedOutlinedTextField(
+                    sourceValue = state.accountUsername,
+                    onValueCommit = viewModel::setAccountUsername,
+                    label = "Nom d'utilisateur",
+                    leadingIcon = { Icon(Icons.Rounded.AlternateEmail, null) },
+                    prefix = { Text("@") },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        }
+
         SectionTitle("Facturation")
         Card(
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -113,24 +140,22 @@ fun SettingsScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 Text(
-                    "Utilisées comme émetteur sur vos factures PDF.",
+                    "Utilisées comme émetteur sur vos factures PDF — jamais votre pseudo.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                OutlinedTextField(
-                    value = state.userName,
-                    onValueChange = viewModel::setUserName,
-                    label = { Text("Votre nom") },
-                    leadingIcon = { androidx.compose.material3.Icon(Icons.Rounded.Person, null) },
-                    singleLine = true,
+                SyncedOutlinedTextField(
+                    sourceValue = state.userName,
+                    onValueCommit = viewModel::setUserName,
+                    label = "Votre nom",
+                    leadingIcon = { Icon(Icons.Rounded.Person, null) },
                     modifier = Modifier.fillMaxWidth(),
                 )
-                OutlinedTextField(
-                    value = state.companyName,
-                    onValueChange = viewModel::setCompanyName,
-                    label = { Text("Société") },
-                    leadingIcon = { androidx.compose.material3.Icon(Icons.Rounded.Business, null) },
-                    singleLine = true,
+                SyncedOutlinedTextField(
+                    sourceValue = state.companyName,
+                    onValueCommit = viewModel::setCompanyName,
+                    label = "Société",
+                    leadingIcon = { Icon(Icons.Rounded.Business, null) },
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
