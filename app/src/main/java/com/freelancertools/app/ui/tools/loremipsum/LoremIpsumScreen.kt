@@ -71,7 +71,10 @@ fun LoremIpsumScreen(navigation: ScaffoldNavigation) {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 PrimaryActionButton(
                     label = "Générer",
-                    onClick = { result = generateLorem(type, quantity.toInt().coerceAtLeast(1), startWithLorem) },
+                    onClick = {
+                        result = runCatching { generateLorem(type, quantity.toInt().coerceIn(1, 50), startWithLorem) }
+                            .getOrElse { "Erreur lors de la génération, réessayez." }
+                    },
                 )
                 if (result.isNotBlank()) {
                     PrimaryActionButton(
@@ -107,8 +110,8 @@ fun LoremIpsumScreen(navigation: ScaffoldNavigation) {
                 Slider(
                     value = quantity,
                     onValueChange = { quantity = it },
-                    valueRange = 1f..20f,
-                    steps = 18,
+                    valueRange = 1f..50f,
+                    steps = 48,
                 )
 
                 Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {

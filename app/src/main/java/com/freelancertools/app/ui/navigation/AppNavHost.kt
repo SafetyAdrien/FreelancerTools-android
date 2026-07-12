@@ -168,6 +168,12 @@ private fun NavGraphBuilder.registerToolRoutes(topLevel: ScaffoldNavigation) {
     composable(Routes.SPEED_TEST) { SpeedTestScreen(topLevel) }
 
     val implementedRoutes = setOf(
+        // Business routes: registered separately by registerBusinessRoutes(), but their
+        // ToolItem entries live in toolCategories (allTools) since the Sprint 2 drawer reorg —
+        // without listing them here, this catch-all re-registers a second composable() for the
+        // same route *after* the real one, silently shadowing FinancesScreen/ClientsScreen/
+        // InvoicesScreen with an empty PlaceholderScreen ("Bientôt disponible").
+        Routes.FINANCES, Routes.CLIENTS, Routes.INVOICES,
         Routes.ROI_CALCULATOR, Routes.META_TAGS, Routes.MARKDOWN_PREVIEW, Routes.EMBED_VISUALIZER,
         Routes.DIFF_CHECKER, Routes.CONVERTER, Routes.PALETTES, Routes.FONT_PAIRER,
         Routes.SCALE_CALCULATOR, Routes.BLOB_MAKER, Routes.LOREM_IPSUM, Routes.PROMPT_MANAGER,

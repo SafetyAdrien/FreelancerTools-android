@@ -59,7 +59,9 @@ fun BlobMakerScreen(navigation: ScaffoldNavigation) {
     val points = remember(complexity, irregularity, seed) {
         BlobGenerator.points(complexity, irregularity, 1f, seed)
     }
-    val color = Color(android.graphics.Color.parseColor(colorHex))
+    val color = remember(colorHex) {
+        runCatching { Color(android.graphics.Color.parseColor(colorHex)) }.getOrDefault(Color(0xFFFF3B5C))
+    }
 
     ToolScaffold(
         title = "Blob Maker",

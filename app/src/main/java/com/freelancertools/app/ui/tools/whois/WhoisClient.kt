@@ -1,7 +1,10 @@
 package com.freelancertools.app.ui.tools.whois
 
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import java.io.IOException
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
@@ -24,6 +27,7 @@ object WhoisClient {
 
     private const val PORT = 43
     private const val TIMEOUT_MS = 10_000
+    private const val OVERALL_TIMEOUT_MS = 20_000L
     private const val MAX_RESPONSE_CHARS = 20_000
 
     class WhoisException(message: String, cause: Throwable? = null) : Exception(message, cause)
@@ -47,15 +51,24 @@ object WhoisClient {
         }
         val tld = clean.substringAfterLast(".", "")
 
-        val server = runCatching { findAuthoritativeServer(clean) }.getOrNull()
-            ?: KNOWN_SERVERS[tld]
-            ?: "whois.iana.org"
+        try {
+            withTimeout(OVERALL_TIMEOUT_MS) {
+                val server = runCatching { findAuthoritativeServer(clean) }.getOrNull()
+                    ?: KNOWN_SERVERS[tld]
+                    ?: "whois.iana.org"
 
-        val raw = query(server, clean)
-        if (raw.length > MAX_RESPONSE_CHARS) {
-            raw.take(MAX_RESPONSE_CHARS) + "\n\n… Résultat tronqué (réponse trop longue)."
-        } else {
-            raw
+                val raw = query(server, clean)
+                if (raw.length > MAX_RESPONSE_CHARS) {
+                    raw.take(MAX_RESPONSE_CHARS) + "\n\n… Résultat tronqué (réponse trop longue)."
+                } else {
+                    raw
+                }
+            }
+        } catch (e: TimeoutCancellationException) {
+            // A slow-trickling server can keep resetting the per-read soTimeout without ever
+            // hitting it; this hard ceiling guarantees the lookup always ends in a clean error
+            // instead of hanging indefinitely.
+            throw WhoisException("Délai dépassé, réessayez.", e)
         }
     }
 
@@ -82,6 +95,13 @@ object WhoisClient {
             throw WhoisException("Le serveur WHOIS ($server) n'a pas répondu à temps.", e)
         } catch (e: IOException) {
             throw WhoisException("Erreur réseau lors de la connexion à $server.", e)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            // Catches anything not covered above (e.g. IllegalArgumentException from a malformed
+            // "refer:" hostname parsed out of a WHOIS response) so it surfaces as a clean, catchable
+            // WhoisException instead of an unclassified RuntimeException.
+            throw WhoisException("Erreur inattendue lors de la requête WHOIS.", e)
         }
     }
 
