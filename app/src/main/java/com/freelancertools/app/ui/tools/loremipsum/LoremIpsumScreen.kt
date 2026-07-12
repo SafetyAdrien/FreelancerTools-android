@@ -11,7 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ContentCopy
-import androidx.compose.material.icons.rounded.Notes
+import androidx.compose.material.icons.automirrored.rounded.Notes
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
@@ -64,7 +64,7 @@ fun LoremIpsumScreen(navigation: ScaffoldNavigation) {
 
     ToolScaffold(
         title = "Lorem Ipsum",
-        icon = Icons.Rounded.Notes,
+        icon = Icons.AutoMirrored.Rounded.Notes,
         navigation = navigation,
         onReset = { type = LoremType.PARAGRAPHS; quantity = 3f; startWithLorem = true; result = "" },
         bottomBar = {

@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.CompareArrows
+import androidx.compose.material.icons.automirrored.rounded.CompareArrows
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -42,7 +42,7 @@ fun DiffCheckerScreen(navigation: ScaffoldNavigation) {
 
     ToolScaffold(
         title = "Diff Checker",
-        icon = Icons.Rounded.CompareArrows,
+        icon = Icons.AutoMirrored.Rounded.CompareArrows,
         navigation = navigation,
         onReset = { before = ""; after = ""; diff = null },
         bottomBar = {

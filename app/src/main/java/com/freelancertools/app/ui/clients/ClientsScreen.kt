@@ -20,7 +20,7 @@ import androidx.compose.material.icons.rounded.DoneAll
 import androidx.compose.material.icons.rounded.People
 import androidx.compose.material.icons.rounded.PersonAdd
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.Sort
+import androidx.compose.material.icons.automirrored.rounded.Sort
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -102,7 +102,7 @@ fun ClientsScreen(
                     shape = RoundedCornerShape(12.dp),
                 )
                 IconButton(onClick = { showSortSheet = true }) {
-                    Icon(Icons.Rounded.Sort, contentDescription = "Trier")
+                    Icon(Icons.AutoMirrored.Rounded.Sort, contentDescription = "Trier")
                 }
             }
         }

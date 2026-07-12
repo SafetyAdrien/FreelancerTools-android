@@ -10,7 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.IosShare
-import androidx.compose.material.icons.rounded.ReceiptLong
+import androidx.compose.material.icons.automirrored.rounded.ReceiptLong
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -57,7 +57,7 @@ fun InvoiceEditorScreen(
 
     ToolScaffold(
         title = "Éditeur Facture",
-        icon = Icons.Rounded.ReceiptLong,
+        icon = Icons.AutoMirrored.Rounded.ReceiptLong,
         navigation = ScaffoldNavigation.Back(onBack),
         bottomBar = {
             PrimaryActionButton(

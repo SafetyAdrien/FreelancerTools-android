@@ -20,7 +20,7 @@ import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.FilterList
 import androidx.compose.material.icons.rounded.MoneyOff
 import androidx.compose.material.icons.rounded.Receipt
-import androidx.compose.material.icons.rounded.TrendingUp
+import androidx.compose.material.icons.automirrored.rounded.TrendingUp
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -145,7 +145,7 @@ fun FinancesScreen(
         StatCard(
             label = "Marge",
             value = "${state.marginPercent.toInt()}%",
-            icon = Icons.Rounded.TrendingUp,
+            icon = Icons.AutoMirrored.Rounded.TrendingUp,
             accentColor = InfoBlue,
             modifier = Modifier.fillMaxWidth(),
         )

@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.ReceiptLong
+import androidx.compose.material.icons.automirrored.rounded.ReceiptLong
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -40,7 +40,7 @@ fun InvoicesScreen(
 
     ToolScaffold(
         title = "Factures",
-        icon = Icons.Rounded.ReceiptLong,
+        icon = Icons.AutoMirrored.Rounded.ReceiptLong,
         navigation = navigation,
         bottomBar = {
             PrimaryActionButton(label = "Nouvelle Facture", icon = Icons.Rounded.Add, onClick = onNewInvoice)
@@ -50,7 +50,7 @@ fun InvoicesScreen(
             EmptyState(
                 title = "Aucune facture",
                 subtitle = "Créez votre première facture en quelques secondes.",
-                icon = Icons.Rounded.ReceiptLong,
+                icon = Icons.AutoMirrored.Rounded.ReceiptLong,
             )
         } else {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {

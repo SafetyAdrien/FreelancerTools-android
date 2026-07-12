@@ -9,7 +9,7 @@ import androidx.compose.material.icons.rounded.Brush
 import androidx.compose.material.icons.rounded.Calculate
 import androidx.compose.material.icons.rounded.Code
 import androidx.compose.material.icons.rounded.Colorize
-import androidx.compose.material.icons.rounded.CompareArrows
+import androidx.compose.material.icons.automirrored.rounded.CompareArrows
 import androidx.compose.material.icons.rounded.ContentCut
 import androidx.compose.material.icons.rounded.Description
 import androidx.compose.material.icons.rounded.Diamond
@@ -18,7 +18,7 @@ import androidx.compose.material.icons.rounded.FilterVintage
 import androidx.compose.material.icons.rounded.FormatColorFill
 import androidx.compose.material.icons.rounded.FormatSize
 import androidx.compose.material.icons.rounded.Image
-import androidx.compose.material.icons.rounded.Notes
+import androidx.compose.material.icons.automirrored.rounded.Notes
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.People
 import androidx.compose.material.icons.rounded.Public
@@ -29,10 +29,10 @@ import androidx.compose.material.icons.rounded.SwapHoriz
 import androidx.compose.material.icons.rounded.TextFields
 import androidx.compose.material.icons.rounded.TextFormat
 import androidx.compose.material.icons.rounded.Timer
-import androidx.compose.material.icons.rounded.ViewSidebar
+import androidx.compose.material.icons.automirrored.rounded.ViewSidebar
 import androidx.compose.material.icons.rounded.Widgets
 import androidx.compose.material.icons.rounded.Home
-import androidx.compose.material.icons.rounded.ReceiptLong
+import androidx.compose.material.icons.automirrored.rounded.ReceiptLong
 import androidx.compose.ui.graphics.vector.ImageVector
 
 data class ToolItem(
@@ -64,7 +64,7 @@ val toolCategories = listOf(
         tools = listOf(
             ToolItem("finances", "Finances", Icons.Rounded.AccountBalanceWallet, Routes.FINANCES),
             ToolItem("clients", "Clients", Icons.Rounded.People, Routes.CLIENTS),
-            ToolItem("invoices", "Factures", Icons.Rounded.ReceiptLong, Routes.INVOICES),
+            ToolItem("invoices", "Factures", Icons.AutoMirrored.Rounded.ReceiptLong, Routes.INVOICES),
             ToolItem("roi", "Calculateur ROI", Icons.Rounded.Calculate, Routes.ROI_CALCULATOR),
         ),
     ),
@@ -75,7 +75,7 @@ val toolCategories = listOf(
             ToolItem("image_optimizer", "Image Optimizer", Icons.Rounded.Image, Routes.IMAGE_OPTIMIZER),
             ToolItem("background_removal", "Détourage IA", Icons.Rounded.AutoAwesome, Routes.BACKGROUND_REMOVAL),
             ToolItem("exif_cleaner", "Nettoyeur EXIF", Icons.Rounded.FilterVintage, Routes.EXIF_CLEANER),
-            ToolItem("favicon_generator", "Favicon Generator", Icons.Rounded.ViewSidebar, Routes.FAVICON_GENERATOR),
+            ToolItem("favicon_generator", "Favicon Generator", Icons.AutoMirrored.Rounded.ViewSidebar, Routes.FAVICON_GENERATOR),
             ToolItem("watermark", "Filigrane", Icons.Rounded.Brush, Routes.WATERMARK),
         ),
     ),
@@ -88,7 +88,7 @@ val toolCategories = listOf(
             ToolItem("whois", "Whois Lookup", Icons.Rounded.Public, Routes.WHOIS_LOOKUP),
             ToolItem("embed_visualizer", "Embed Visualizer", Icons.Rounded.Code, Routes.EMBED_VISUALIZER),
             ToolItem("speed_test", "Speed Test", Icons.Rounded.Speed, Routes.SPEED_TEST),
-            ToolItem("diff_checker", "Diff Checker", Icons.Rounded.CompareArrows, Routes.DIFF_CHECKER),
+            ToolItem("diff_checker", "Diff Checker", Icons.AutoMirrored.Rounded.CompareArrows, Routes.DIFF_CHECKER),
             ToolItem("converter", "Convertisseur", Icons.Rounded.SwapHoriz, Routes.CONVERTER),
         ),
     ),
@@ -101,7 +101,7 @@ val toolCategories = listOf(
             ToolItem("font_pairer", "Font Pairer", Icons.Rounded.TextFormat, Routes.FONT_PAIRER),
             ToolItem("scale_calculator", "Scale Calculator", Icons.Rounded.FormatSize, Routes.SCALE_CALCULATOR),
             ToolItem("blob_maker", "Blob Maker", Icons.Rounded.FormatColorFill, Routes.BLOB_MAKER),
-            ToolItem("lorem_ipsum", "Lorem Ipsum", Icons.Rounded.Notes, Routes.LOREM_IPSUM),
+            ToolItem("lorem_ipsum", "Lorem Ipsum", Icons.AutoMirrored.Rounded.Notes, Routes.LOREM_IPSUM),
             ToolItem("color_pickers", "Color Pickers", Icons.Rounded.Colorize, Routes.COLOR_PICKERS),
             ToolItem("design_system", "Design System", Icons.Rounded.Widgets, Routes.DESIGN_SYSTEM),
         ),

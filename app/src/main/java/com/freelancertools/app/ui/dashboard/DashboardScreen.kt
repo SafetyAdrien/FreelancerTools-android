@@ -14,7 +14,7 @@ import androidx.compose.material.icons.rounded.Image
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.People
 import androidx.compose.material.icons.rounded.QrCode2
-import androidx.compose.material.icons.rounded.ReceiptLong
+import androidx.compose.material.icons.automirrored.rounded.ReceiptLong
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -128,7 +128,7 @@ fun DashboardScreen(
             SectionTitle("Accès Rapide")
             QuickActionButton(
                 label = "Nouvelle Facture",
-                icon = Icons.Rounded.ReceiptLong,
+                icon = Icons.AutoMirrored.Rounded.ReceiptLong,
                 accentColor = InfoBlue,
                 onClick = { onNavigate(Routes.invoiceEditor()) },
             )

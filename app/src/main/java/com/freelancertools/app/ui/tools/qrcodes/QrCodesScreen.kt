@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ContentCopy
-import androidx.compose.material.icons.rounded.OpenInNew
+import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material.icons.rounded.QrCode2
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -120,7 +120,7 @@ private fun ScanTab() {
                     if (isLink) {
                         PrimaryActionButton(
                             label = "Ouvrir le lien",
-                            icon = Icons.Rounded.OpenInNew,
+                            icon = Icons.AutoMirrored.Rounded.OpenInNew,
                             onClick = { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(value))) },
                         )
                     }
