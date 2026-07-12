@@ -43,6 +43,9 @@ object Routes {
     const val LOREM_IPSUM = "tools/lorem_ipsum"
     const val COLOR_PICKERS = "tools/color_pickers"
     const val DESIGN_SYSTEM = "tools/design_system"
+    const val DESIGN_SYSTEM_CATEGORY = "tools/design_system/{categoryId}"
+
+    fun designSystemCategory(categoryId: String) = "tools/design_system/$categoryId"
 
     // Utilities
     const val QR_CODES = "tools/qr_codes"

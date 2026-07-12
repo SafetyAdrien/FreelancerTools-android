@@ -28,7 +28,9 @@ import com.freelancertools.app.ui.tools.backgroundremoval.BackgroundRemovalScree
 import com.freelancertools.app.ui.tools.blobmaker.BlobMakerScreen
 import com.freelancertools.app.ui.tools.colorpickers.ColorPickersScreen
 import com.freelancertools.app.ui.tools.converter.ConverterScreen
+import com.freelancertools.app.ui.tools.designsystem.DesignSystemCategoryScreen
 import com.freelancertools.app.ui.tools.designsystem.DesignSystemScreen
+import com.freelancertools.app.ui.tools.designsystem.DiscordDesignScreen
 import com.freelancertools.app.ui.tools.diffchecker.DiffCheckerScreen
 import com.freelancertools.app.ui.tools.embedvisualizer.EmbedVisualizerScreen
 import com.freelancertools.app.ui.tools.exifcleaner.ExifCleanerScreen
@@ -104,7 +106,7 @@ fun FreelancerToolsApp(startRoute: String? = null) {
             }
 
             registerBusinessRoutes(navController, topLevel, ::push)
-            registerToolRoutes(topLevel)
+            registerToolRoutes(navController, topLevel, ::push)
         }
     }
 }
@@ -137,7 +139,11 @@ private fun NavGraphBuilder.registerBusinessRoutes(
     }
 }
 
-private fun NavGraphBuilder.registerToolRoutes(topLevel: ScaffoldNavigation) {
+private fun NavGraphBuilder.registerToolRoutes(
+    navController: NavHostController,
+    topLevel: ScaffoldNavigation,
+    push: (String) -> Unit,
+) {
     composable(Routes.ROI_CALCULATOR) { RoiCalculatorScreen(topLevel) }
     composable(Routes.META_TAGS) { MetaTagsScreen(topLevel) }
     composable(Routes.MARKDOWN_PREVIEW) { MarkdownPreviewScreen(topLevel) }
@@ -151,7 +157,21 @@ private fun NavGraphBuilder.registerToolRoutes(topLevel: ScaffoldNavigation) {
     composable(Routes.LOREM_IPSUM) { LoremIpsumScreen(topLevel) }
     composable(Routes.PROMPT_MANAGER) { PromptManagerScreen(topLevel) }
     composable(Routes.COLOR_PICKERS) { ColorPickersScreen(topLevel) }
-    composable(Routes.DESIGN_SYSTEM) { DesignSystemScreen(topLevel) }
+    composable(Routes.DESIGN_SYSTEM) {
+        DesignSystemScreen(
+            navigation = topLevel,
+            onOpenCategory = { categoryId -> push(Routes.designSystemCategory(categoryId)) },
+        )
+    }
+    composable(Routes.DESIGN_SYSTEM_CATEGORY) { backStackEntry ->
+        val categoryId = backStackEntry.arguments?.getString("categoryId").orEmpty()
+        val onBack: () -> Unit = { navController.popBackStack() }
+        if (categoryId == "discord") {
+            DiscordDesignScreen(onBack = onBack)
+        } else {
+            DesignSystemCategoryScreen(categoryId = categoryId, onBack = onBack)
+        }
+    }
 
     composable(Routes.QR_CODES) { QrCodesScreen(topLevel) }
     composable(Routes.IMAGE_OPTIMIZER) { ImageOptimizerScreen(topLevel) }
