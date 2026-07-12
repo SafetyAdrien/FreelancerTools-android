@@ -41,6 +41,7 @@ fun MetaTagsScreen(navigation: ScaffoldNavigation) {
         title = "Générateur Meta Tags",
         icon = Icons.Rounded.Sell,
         navigation = navigation,
+        onReset = { title = ""; description = ""; image = ""; url = "" },
         bottomBar = {
             PrimaryActionButton(
                 label = "Copier",

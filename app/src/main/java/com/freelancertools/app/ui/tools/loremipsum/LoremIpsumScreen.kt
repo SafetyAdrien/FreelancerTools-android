@@ -7,11 +7,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ContentCopy
-import androidx.compose.material.icons.rounded.Notes
+import androidx.compose.material.icons.automirrored.rounded.Notes
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
@@ -64,13 +62,17 @@ fun LoremIpsumScreen(navigation: ScaffoldNavigation) {
 
     ToolScaffold(
         title = "Lorem Ipsum",
-        icon = Icons.Rounded.Notes,
+        icon = Icons.AutoMirrored.Rounded.Notes,
         navigation = navigation,
+        onReset = { type = LoremType.PARAGRAPHS; quantity = 3f; startWithLorem = true; result = "" },
         bottomBar = {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 PrimaryActionButton(
                     label = "Générer",
-                    onClick = { result = generateLorem(type, quantity.toInt().coerceAtLeast(1), startWithLorem) },
+                    onClick = {
+                        result = runCatching { generateLorem(type, quantity.toInt().coerceIn(1, 50), startWithLorem) }
+                            .getOrElse { "Erreur lors de la génération, réessayez." }
+                    },
                 )
                 if (result.isNotBlank()) {
                     PrimaryActionButton(
@@ -106,8 +108,8 @@ fun LoremIpsumScreen(navigation: ScaffoldNavigation) {
                 Slider(
                     value = quantity,
                     onValueChange = { quantity = it },
-                    valueRange = 1f..20f,
-                    steps = 18,
+                    valueRange = 1f..50f,
+                    steps = 48,
                 )
 
                 Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
@@ -125,9 +127,7 @@ fun LoremIpsumScreen(navigation: ScaffoldNavigation) {
                 Text(
                     text = result,
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .verticalScroll(rememberScrollState()),
+                    modifier = Modifier.padding(16.dp),
                 )
             }
         }

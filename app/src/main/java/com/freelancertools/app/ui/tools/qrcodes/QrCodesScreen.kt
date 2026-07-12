@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ContentCopy
-import androidx.compose.material.icons.rounded.OpenInNew
+import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material.icons.rounded.QrCode2
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -29,6 +29,8 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -49,8 +51,15 @@ private enum class QrTab(val label: String) { SCAN("Scanner"), GENERATE("Génér
 @Composable
 fun QrCodesScreen(navigation: ScaffoldNavigation) {
     var tab by rememberSaveable { mutableStateOf(QrTab.GENERATE) }
+    var resetKey by rememberSaveable { mutableIntStateOf(0) }
 
-    ToolScaffold(title = "QR Codes", icon = Icons.Rounded.QrCode2, navigation = navigation, scrollable = tab == QrTab.GENERATE) {
+    ToolScaffold(
+        title = "QR Codes",
+        icon = Icons.Rounded.QrCode2,
+        navigation = navigation,
+        scrollable = tab == QrTab.GENERATE,
+        onReset = { tab = QrTab.GENERATE; resetKey++ },
+    ) {
         SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
             QrTab.entries.forEachIndexed { index, t ->
                 SegmentedButton(
@@ -61,9 +70,11 @@ fun QrCodesScreen(navigation: ScaffoldNavigation) {
             }
         }
 
-        when (tab) {
-            QrTab.SCAN -> ScanTab()
-            QrTab.GENERATE -> GenerateTab()
+        key(resetKey) {
+            when (tab) {
+                QrTab.SCAN -> ScanTab()
+                QrTab.GENERATE -> GenerateTab()
+            }
         }
     }
 }
@@ -109,7 +120,7 @@ private fun ScanTab() {
                     if (isLink) {
                         PrimaryActionButton(
                             label = "Ouvrir le lien",
-                            icon = Icons.Rounded.OpenInNew,
+                            icon = Icons.AutoMirrored.Rounded.OpenInNew,
                             onClick = { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(value))) },
                         )
                     }

@@ -47,6 +47,7 @@ fun SpeedTestScreen(navigation: ScaffoldNavigation) {
         title = "Speed Test",
         icon = Icons.Rounded.Speed,
         navigation = navigation,
+        onReset = { isRunning = false; progressText = ""; result = null },
         bottomBar = {
             PrimaryActionButton(
                 label = if (isRunning) "Test en cours..." else "Démarrer",

@@ -21,7 +21,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenu
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
@@ -31,7 +30,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.menuAnchor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -65,7 +63,12 @@ fun SmartTimerScreen(navigation: ScaffoldNavigation, viewModel: SmartTimerViewMo
 
     val notificationPermissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {}
 
-    ToolScaffold(title = "Smart Timer", icon = Icons.Rounded.Timer, navigation = navigation) {
+    ToolScaffold(
+        title = "Smart Timer",
+        icon = Icons.Rounded.Timer,
+        navigation = navigation,
+        onReset = { taskLabel = "Travail"; hourlyRate = "40"; modeExpanded = false; viewModel.reset() },
+    ) {
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), shape = MaterialTheme.shapes.large) {
             Row(Modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 ExposedDropdownMenuBox(expanded = modeExpanded, onExpandedChange = { modeExpanded = it }, modifier = Modifier.weight(1f)) {
@@ -112,12 +115,10 @@ fun SmartTimerScreen(navigation: ScaffoldNavigation, viewModel: SmartTimerViewMo
                 .padding(vertical = 20.dp),
             contentAlignment = Alignment.Center,
         ) {
-            val progress = when {
-                state.mode.durationSeconds != null -> state.elapsedSeconds.toFloat() / state.mode.durationSeconds
-                else -> 0f
-            }
+            val totalSeconds = state.mode.durationSeconds
+            val progress = if (totalSeconds != null) state.elapsedSeconds.toFloat() / totalSeconds else 0f
             CircularProgressIndicator(
-                progress = { if (state.mode.durationSeconds != null) progress.coerceIn(0f, 1f) else 1f },
+                progress = { if (totalSeconds != null) progress.coerceIn(0f, 1f) else 1f },
                 modifier = Modifier.size(220.dp),
                 strokeWidth = 10.dp,
                 color = InfoBlue,

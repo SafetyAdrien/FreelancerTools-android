@@ -36,6 +36,7 @@ fun EmbedVisualizerScreen(navigation: ScaffoldNavigation) {
         icon = Icons.Rounded.Code,
         navigation = navigation,
         scrollable = false,
+        onReset = { url = ""; loadedUrl = null },
         bottomBar = {
             PrimaryActionButton(
                 label = "Prévisualiser",

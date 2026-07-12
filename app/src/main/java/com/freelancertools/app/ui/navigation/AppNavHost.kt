@@ -22,10 +22,15 @@ import com.freelancertools.app.ui.dashboard.DashboardScreen
 import com.freelancertools.app.ui.finances.FinancesScreen
 import com.freelancertools.app.ui.invoices.InvoiceEditorScreen
 import com.freelancertools.app.ui.invoices.InvoicesScreen
+import com.freelancertools.app.ui.managetools.ManageToolsScreen
 import com.freelancertools.app.ui.settings.SettingsScreen
 import com.freelancertools.app.ui.tools.backgroundremoval.BackgroundRemovalScreen
 import com.freelancertools.app.ui.tools.blobmaker.BlobMakerScreen
+import com.freelancertools.app.ui.tools.colorpickers.ColorPickersScreen
 import com.freelancertools.app.ui.tools.converter.ConverterScreen
+import com.freelancertools.app.ui.tools.designsystem.DesignSystemCategoryScreen
+import com.freelancertools.app.ui.tools.designsystem.DesignSystemScreen
+import com.freelancertools.app.ui.tools.designsystem.DiscordDesignScreen
 import com.freelancertools.app.ui.tools.diffchecker.DiffCheckerScreen
 import com.freelancertools.app.ui.tools.embedvisualizer.EmbedVisualizerScreen
 import com.freelancertools.app.ui.tools.exifcleaner.ExifCleanerScreen
@@ -94,11 +99,14 @@ fun FreelancerToolsApp(startRoute: String? = null) {
                 DashboardScreen(navigation = topLevel, onNavigate = ::navigateTopLevel)
             }
             composable(Routes.SETTINGS) {
-                SettingsScreen(navigation = topLevel)
+                SettingsScreen(navigation = topLevel, onManageTools = { push(Routes.MANAGE_TOOLS) })
+            }
+            composable(Routes.MANAGE_TOOLS) {
+                ManageToolsScreen(onBack = { navController.popBackStack() })
             }
 
             registerBusinessRoutes(navController, topLevel, ::push)
-            registerToolRoutes(topLevel)
+            registerToolRoutes(navController, topLevel, ::push)
         }
     }
 }
@@ -131,7 +139,11 @@ private fun NavGraphBuilder.registerBusinessRoutes(
     }
 }
 
-private fun NavGraphBuilder.registerToolRoutes(topLevel: ScaffoldNavigation) {
+private fun NavGraphBuilder.registerToolRoutes(
+    navController: NavHostController,
+    topLevel: ScaffoldNavigation,
+    push: (String) -> Unit,
+) {
     composable(Routes.ROI_CALCULATOR) { RoiCalculatorScreen(topLevel) }
     composable(Routes.META_TAGS) { MetaTagsScreen(topLevel) }
     composable(Routes.MARKDOWN_PREVIEW) { MarkdownPreviewScreen(topLevel) }
@@ -144,6 +156,22 @@ private fun NavGraphBuilder.registerToolRoutes(topLevel: ScaffoldNavigation) {
     composable(Routes.BLOB_MAKER) { BlobMakerScreen(topLevel) }
     composable(Routes.LOREM_IPSUM) { LoremIpsumScreen(topLevel) }
     composable(Routes.PROMPT_MANAGER) { PromptManagerScreen(topLevel) }
+    composable(Routes.COLOR_PICKERS) { ColorPickersScreen(topLevel) }
+    composable(Routes.DESIGN_SYSTEM) {
+        DesignSystemScreen(
+            navigation = topLevel,
+            onOpenCategory = { categoryId -> push(Routes.designSystemCategory(categoryId)) },
+        )
+    }
+    composable(Routes.DESIGN_SYSTEM_CATEGORY) { backStackEntry ->
+        val categoryId = backStackEntry.arguments?.getString("categoryId").orEmpty()
+        val onBack: () -> Unit = { navController.popBackStack() }
+        if (categoryId == "discord") {
+            DiscordDesignScreen(onBack = onBack)
+        } else {
+            DesignSystemCategoryScreen(categoryId = categoryId, onBack = onBack)
+        }
+    }
 
     composable(Routes.QR_CODES) { QrCodesScreen(topLevel) }
     composable(Routes.IMAGE_OPTIMIZER) { ImageOptimizerScreen(topLevel) }
@@ -160,9 +188,16 @@ private fun NavGraphBuilder.registerToolRoutes(topLevel: ScaffoldNavigation) {
     composable(Routes.SPEED_TEST) { SpeedTestScreen(topLevel) }
 
     val implementedRoutes = setOf(
+        // Business routes: registered separately by registerBusinessRoutes(), but their
+        // ToolItem entries live in toolCategories (allTools) since the Sprint 2 drawer reorg —
+        // without listing them here, this catch-all re-registers a second composable() for the
+        // same route *after* the real one, silently shadowing FinancesScreen/ClientsScreen/
+        // InvoicesScreen with an empty PlaceholderScreen ("Bientôt disponible").
+        Routes.FINANCES, Routes.CLIENTS, Routes.INVOICES,
         Routes.ROI_CALCULATOR, Routes.META_TAGS, Routes.MARKDOWN_PREVIEW, Routes.EMBED_VISUALIZER,
         Routes.DIFF_CHECKER, Routes.CONVERTER, Routes.PALETTES, Routes.FONT_PAIRER,
         Routes.SCALE_CALCULATOR, Routes.BLOB_MAKER, Routes.LOREM_IPSUM, Routes.PROMPT_MANAGER,
+        Routes.COLOR_PICKERS, Routes.DESIGN_SYSTEM,
         Routes.QR_CODES, Routes.IMAGE_OPTIMIZER, Routes.EXIF_CLEANER, Routes.FAVICON_GENERATOR,
         Routes.WATERMARK, Routes.FONT_LIBRARY, Routes.BACKGROUND_REMOVAL, Routes.VIDEO_CUTTER,
         Routes.SMART_TIMER, Routes.WHOIS_LOOKUP, Routes.SPEED_TEST,

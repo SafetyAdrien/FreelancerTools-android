@@ -16,7 +16,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenu
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
@@ -26,9 +25,10 @@ import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.menuAnchor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -64,8 +64,14 @@ private val CURRENCY_RATES = linkedMapOf(
 @Composable
 fun ConverterScreen(navigation: ScaffoldNavigation) {
     var tab by rememberSaveable { mutableStateOf(ConverterTab.LENGTH) }
+    var resetKey by rememberSaveable { mutableIntStateOf(0) }
 
-    ToolScaffold(title = "Convertisseur", icon = Icons.Rounded.SwapHoriz, navigation = navigation) {
+    ToolScaffold(
+        title = "Convertisseur",
+        icon = Icons.Rounded.SwapHoriz,
+        navigation = navigation,
+        onReset = { tab = ConverterTab.LENGTH; resetKey++ },
+    ) {
         SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
             ConverterTab.entries.forEachIndexed { index, t ->
                 SegmentedButton(
@@ -76,11 +82,13 @@ fun ConverterScreen(navigation: ScaffoldNavigation) {
             }
         }
 
-        when (tab) {
-            ConverterTab.LENGTH -> UnitConverter(LENGTH_UNITS)
-            ConverterTab.WEIGHT -> UnitConverter(WEIGHT_UNITS)
-            ConverterTab.CURRENCY -> CurrencyConverter()
-            ConverterTab.COLOR -> ColorConverter()
+        key(resetKey) {
+            when (tab) {
+                ConverterTab.LENGTH -> UnitConverter(LENGTH_UNITS)
+                ConverterTab.WEIGHT -> UnitConverter(WEIGHT_UNITS)
+                ConverterTab.CURRENCY -> CurrencyConverter()
+                ConverterTab.COLOR -> ColorConverter()
+            }
         }
     }
 }

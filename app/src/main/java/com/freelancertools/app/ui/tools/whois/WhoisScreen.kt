@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ContentCopy
 import androidx.compose.material.icons.rounded.Public
@@ -44,6 +42,7 @@ fun WhoisScreen(navigation: ScaffoldNavigation) {
         title = "Whois Lookup",
         icon = Icons.Rounded.Public,
         navigation = navigation,
+        onReset = { domain = ""; result = ""; isLoading = false },
         bottomBar = {
             PrimaryActionButton(
                 label = "Rechercher",
@@ -53,7 +52,7 @@ fun WhoisScreen(navigation: ScaffoldNavigation) {
                     result = ""
                     scope.launch {
                         result = runCatching { WhoisClient.lookup(domain) }
-                            .getOrElse { "Erreur lors de la requête : ${it.message}" }
+                            .getOrElse { describeError(it) }
                         isLoading = false
                     }
                 },
@@ -79,9 +78,7 @@ fun WhoisScreen(navigation: ScaffoldNavigation) {
                     text = result,
                     fontFamily = FontFamily.Monospace,
                     style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .verticalScroll(rememberScrollState()),
+                    modifier = Modifier.padding(16.dp),
                 )
             }
             PrimaryActionButton(
@@ -91,4 +88,9 @@ fun WhoisScreen(navigation: ScaffoldNavigation) {
             )
         }
     }
+}
+
+private fun describeError(t: Throwable): String = when (t) {
+    is WhoisClient.WhoisException -> t.message ?: "Erreur réseau, réessayez."
+    else -> "Erreur réseau, réessayez."
 }

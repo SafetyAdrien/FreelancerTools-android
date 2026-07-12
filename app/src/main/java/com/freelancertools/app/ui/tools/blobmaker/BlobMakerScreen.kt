@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Casino
-import androidx.compose.material.icons.rounded.ContentCopy
 import androidx.compose.material.icons.rounded.FormatColorFill
 import androidx.compose.material.icons.rounded.Save
 import androidx.compose.material3.Card
@@ -29,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -42,18 +42,16 @@ import com.freelancertools.app.ui.common.PrimaryActionButton
 import com.freelancertools.app.ui.common.ScaffoldNavigation
 import com.freelancertools.app.ui.common.SecondaryActionButton
 import com.freelancertools.app.ui.common.ToolScaffold
+import com.freelancertools.app.ui.common.colorpicker.ModernColorPickerDialog
 import kotlin.random.Random
-
-private val COLOR_PRESETS = listOf(
-    "#FF3B5C", "#3B82F6", "#2ECC71", "#F39C12", "#9B59B6", "#1ABC9C",
-)
 
 @Composable
 fun BlobMakerScreen(navigation: ScaffoldNavigation) {
     var complexity by rememberSaveable { mutableIntStateOf(8) }
     var irregularity by rememberSaveable { mutableIntStateOf(30) }
     var sizeDp by rememberSaveable { mutableFloatStateOf(220f) }
-    var colorIndex by rememberSaveable { mutableIntStateOf(0) }
+    var colorHex by rememberSaveable { mutableStateOf("#FF3B5C") }
+    var showColorPicker by rememberSaveable { mutableStateOf(false) }
     var seed by rememberSaveable { mutableLongStateOf(Random.nextLong()) }
     val context = LocalContext.current
     val clipboard = context.getSystemService(ClipboardManager::class.java)
@@ -61,13 +59,21 @@ fun BlobMakerScreen(navigation: ScaffoldNavigation) {
     val points = remember(complexity, irregularity, seed) {
         BlobGenerator.points(complexity, irregularity, 1f, seed)
     }
-    val colorHex = COLOR_PRESETS[colorIndex]
-    val color = Color(android.graphics.Color.parseColor(colorHex))
+    val color = remember(colorHex) {
+        runCatching { Color(android.graphics.Color.parseColor(colorHex)) }.getOrDefault(Color(0xFFFF3B5C))
+    }
 
     ToolScaffold(
         title = "Blob Maker",
         icon = Icons.Rounded.FormatColorFill,
         navigation = navigation,
+        onReset = {
+            complexity = 8
+            irregularity = 30
+            sizeDp = 220f
+            colorHex = "#FF3B5C"
+            seed = Random.nextLong()
+        },
         bottomBar = {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 PrimaryActionButton(
@@ -108,19 +114,14 @@ fun BlobMakerScreen(navigation: ScaffoldNavigation) {
             shape = MaterialTheme.shapes.large,
         ) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text("Couleur", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(top = 6.dp))
-                }
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    COLOR_PRESETS.forEachIndexed { index, hex ->
-                        val c = Color(android.graphics.Color.parseColor(hex))
-                        androidx.compose.foundation.layout.Box(
-                            modifier = Modifier
-                                .size(28.dp)
-                                .background(c, CircleShape)
-                                .clickable { colorIndex = index },
-                        )
-                    }
+                Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text("Couleur", style = MaterialTheme.typography.bodyLarge)
+                    androidx.compose.foundation.layout.Box(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .background(color, CircleShape)
+                            .clickable { showColorPicker = true },
+                    )
                 }
 
                 Text("Complexité : $complexity", style = MaterialTheme.typography.titleMedium)
@@ -165,5 +166,18 @@ fun BlobMakerScreen(navigation: ScaffoldNavigation) {
                 }
             }
         }
+    }
+
+    if (showColorPicker) {
+        ModernColorPickerDialog(
+            initialColor = color,
+            onDismiss = { showColorPicker = false },
+            onColorConfirmed = { picked ->
+                val r = (picked.red * 255).toInt()
+                val g = (picked.green * 255).toInt()
+                val b = (picked.blue * 255).toInt()
+                colorHex = String.format("#%02X%02X%02X", r, g, b)
+            },
+        )
     }
 }

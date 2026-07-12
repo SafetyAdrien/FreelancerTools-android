@@ -8,6 +8,7 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.freelancertools.app.FreelancerToolsApp
 import com.freelancertools.app.MainActivity
+import androidx.glance.appwidget.updateAll
 import com.freelancertools.app.widget.SmartTimerWidget
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

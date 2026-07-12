@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.PhotoLibrary
-import androidx.compose.material.icons.rounded.ViewSidebar
+import androidx.compose.material.icons.automirrored.rounded.ViewSidebar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -56,8 +56,9 @@ fun FaviconGeneratorScreen(navigation: ScaffoldNavigation) {
 
     ToolScaffold(
         title = "Favicon Generator",
-        icon = Icons.Rounded.ViewSidebar,
+        icon = Icons.AutoMirrored.Rounded.ViewSidebar,
         navigation = navigation,
+        onReset = { sourceUri = null; sourceBitmap = null },
         bottomBar = {
             PrimaryActionButton(
                 label = "Générer et exporter (.zip)",

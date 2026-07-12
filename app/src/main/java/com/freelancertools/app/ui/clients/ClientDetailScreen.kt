@@ -9,7 +9,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,7 +21,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,12 +54,28 @@ fun ClientDetailScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     var showAddProject by rememberSaveable { mutableStateOf(false) }
+    var confirmDelete by rememberSaveable { mutableStateOf(false) }
     val client = state.client
+
+    LaunchedEffect(Unit) {
+        viewModel.clientDeleted.collect { onBack() }
+    }
 
     ToolScaffold(
         title = client?.name ?: "Client",
         icon = Icons.Rounded.Person,
         navigation = ScaffoldNavigation.Back(onBack),
+        actions = {
+            if (client != null) {
+                IconButton(onClick = { confirmDelete = true }) {
+                    Icon(
+                        Icons.Rounded.Delete,
+                        contentDescription = "Supprimer le client",
+                        tint = MaterialTheme.colorScheme.error,
+                    )
+                }
+            }
+        },
         bottomBar = {
             PrimaryActionButton(
                 label = "Nouveau Projet",
@@ -124,6 +144,23 @@ fun ClientDetailScreen(
             onSave = { title, tag, price, description ->
                 viewModel.addProject(title, tag, price, description)
                 showAddProject = false
+            },
+        )
+    }
+
+    if (confirmDelete && client != null) {
+        AlertDialog(
+            onDismissRequest = { confirmDelete = false },
+            title = { Text("Supprimer ${client.name} ?") },
+            text = { Text("Tous ses projets associés seront également supprimés. Cette action est irréversible.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    viewModel.deleteClient()
+                    confirmDelete = false
+                }) { Text("Supprimer", color = MaterialTheme.colorScheme.error) }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmDelete = false }) { Text("Annuler") }
             },
         )
     }

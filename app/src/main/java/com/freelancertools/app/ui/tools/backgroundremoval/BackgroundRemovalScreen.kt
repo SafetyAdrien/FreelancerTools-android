@@ -56,6 +56,7 @@ fun BackgroundRemovalScreen(navigation: ScaffoldNavigation) {
         title = "Détourage IA",
         icon = Icons.Rounded.AutoAwesome,
         navigation = navigation,
+        onReset = { sourceBitmap = null; resultBitmap = null; isProcessing = false },
         bottomBar = {
             if (resultBitmap != null) {
                 PrimaryActionButton(

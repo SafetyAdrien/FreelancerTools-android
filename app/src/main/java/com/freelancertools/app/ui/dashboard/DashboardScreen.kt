@@ -14,7 +14,7 @@ import androidx.compose.material.icons.rounded.Image
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.People
 import androidx.compose.material.icons.rounded.QrCode2
-import androidx.compose.material.icons.rounded.ReceiptLong
+import androidx.compose.material.icons.automirrored.rounded.ReceiptLong
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -49,7 +49,9 @@ fun DashboardScreen(
     viewModel: DashboardViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val firstName = state.userName.trim().substringBefore(" ").ifBlank { "là" }
+    val displayName = state.accountUsername.trim().ifBlank { null }?.let { "@$it" }
+        ?: state.billingName.trim().substringBefore(" ").ifBlank { null }
+        ?: "là"
     val currencyFormat = remember(Locale.FRANCE) {
         NumberFormat.getCurrencyInstance(Locale.FRANCE)
     }
@@ -66,7 +68,7 @@ fun DashboardScreen(
         ) {
             Column(Modifier.weight(1f)) {
                 Text(
-                    text = "Bonjour, $firstName 👋",
+                    text = "Bonjour, $displayName 👋",
                     style = MaterialTheme.typography.headlineMedium,
                 )
                 Text(
@@ -126,7 +128,7 @@ fun DashboardScreen(
             SectionTitle("Accès Rapide")
             QuickActionButton(
                 label = "Nouvelle Facture",
-                icon = Icons.Rounded.ReceiptLong,
+                icon = Icons.AutoMirrored.Rounded.ReceiptLong,
                 accentColor = InfoBlue,
                 onClick = { onNavigate(Routes.invoiceEditor()) },
             )

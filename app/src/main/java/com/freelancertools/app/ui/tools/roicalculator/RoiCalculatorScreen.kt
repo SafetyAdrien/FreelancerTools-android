@@ -33,7 +33,12 @@ fun RoiCalculatorScreen(navigation: ScaffoldNavigation) {
     val gainValue = gain.toDoubleOrNull() ?: 0.0
     val roi = if (investmentValue > 0) ((gainValue - investmentValue) / investmentValue) * 100 else null
 
-    ToolScaffold(title = "Calculateur ROI", icon = Icons.Rounded.Calculate, navigation = navigation) {
+    ToolScaffold(
+        title = "Calculateur ROI",
+        icon = Icons.Rounded.Calculate,
+        navigation = navigation,
+        onReset = { investment = ""; gain = "" },
+    ) {
         Card(
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
             shape = MaterialTheme.shapes.large,

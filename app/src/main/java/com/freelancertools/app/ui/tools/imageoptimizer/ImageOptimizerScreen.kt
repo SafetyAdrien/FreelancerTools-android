@@ -72,6 +72,7 @@ fun ImageOptimizerScreen(navigation: ScaffoldNavigation) {
         title = "Image Optimizer",
         icon = Icons.Rounded.Image,
         navigation = navigation,
+        onReset = { selectedUris = emptyList(); quality = 80f; format = OutputFormat.WEBP; log.clear() },
         bottomBar = {
             PrimaryActionButton(
                 label = "Optimiser (${selectedUris.size})",
