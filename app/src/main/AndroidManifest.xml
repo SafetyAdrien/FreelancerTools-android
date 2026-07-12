@@ -13,6 +13,10 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
+    <queries>
+        <provider android:authorities="com.google.android.gms.fonts" />
+    </queries>
+
     <application
         android:name=".FreelancerToolsApp"
         android:allowBackup="true"

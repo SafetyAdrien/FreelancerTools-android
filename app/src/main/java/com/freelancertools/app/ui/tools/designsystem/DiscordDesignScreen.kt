@@ -25,7 +25,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -169,7 +168,7 @@ private fun DiscordButtonsSection() {
         ) { Text("Primaire") }
         OutlinedButton(
             onClick = {},
-            colors = OutlinedButtonDefaults.outlinedButtonColors(contentColor = DiscordColors.TextPrimary),
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = DiscordColors.TextPrimary),
             border = androidx.compose.foundation.BorderStroke(1.dp, DiscordColors.TextMuted),
             shape = RoundedCornerShape(4.dp),
         ) { Text("Secondaire") }
@@ -215,7 +214,7 @@ private fun DiscordAvatarsSection() {
         }
         OutlinedButton(
             onClick = { pressed = !pressed },
-            colors = OutlinedButtonDefaults.outlinedButtonColors(contentColor = DiscordColors.TextPrimary),
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = DiscordColors.TextPrimary),
             border = androidx.compose.foundation.BorderStroke(1.dp, DiscordColors.TextMuted),
         ) { Text(if (pressed) "Relâcher" else "Appuyer") }
     }
